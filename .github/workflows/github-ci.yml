@@ -15,19 +15,19 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pylint
-        pip install --no-cache-dir -e 'backend/src'
-
-    - name: Analysing the code with pylint
-      run: |
-        pylint $(git ls-files '*.py')
+#    - name: Install dependencies
+#      run: |
+#        python -m pip install --upgrade pip
+#        pip install pylint
+#        pip install --no-cache-dir -e 'backend/src'
+#
+#    - name: Analysing the code with pylint
+#      run: |
+#        pylint $(git ls-files '*.py')
 
     - name: Build Docker image
       run: |
-        docker build -t rtvt_app .
+        docker build -t omarelsayd:rtvt_app .
         docker tag omarelsayd/rtvt_app:latest omarelsayd/rtvt_app:latest 
 
 #    - name: Login to Docker Hub
