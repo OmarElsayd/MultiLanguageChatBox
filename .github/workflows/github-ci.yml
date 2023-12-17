@@ -1,6 +1,9 @@
-name: Pylint
+name: RTVT CI/CD
 
 on: [push]
+
+env:
+  IMAGE_TAG: $(date +%Y%m%d%H%M%S)
 
 jobs:
   build:
@@ -15,20 +18,19 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-#    - name: Install dependencies
-#      run: |
-#        python -m pip install --upgrade pip
-#        pip install pylint
-#        pip install --no-cache-dir -e 'backend/src'
-#
-#    - name: Analysing the code with pylint
-#      run: |
-#        pylint $(git ls-files '*.py')
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pylint
+        pip install --no-cache-dir -e 'backend/src'
+
+    - name: Analysing the code with pylint
+      run: |
+        pylint $(git ls-files '*.py')
 
     - name: Build Docker image
       run: |
         docker build -t ${{ secrets.DOCKER_USERNAME }}/rtvt_app .
-        IMAGE_TAG=$(date +%Y%m%d%H%M%S)
         docker tag ${{ secrets.DOCKER_USERNAME }}/rtvt_app:latest ${{ secrets.DOCKER_USERNAME }}/rtvt_app:${IMAGE_TAG} 
 
     - name: Login to Docker Hub
@@ -39,5 +41,4 @@ jobs:
     - name: Push Docker image
       if: github.event_name == 'push'
       run: |
-        IMAGE_TAG=$(date +%Y%m%d%H%M%S)
         docker push ${{ secrets.DOCKER_USERNAME }}/rtvt_app:${IMAGE_TAG}
