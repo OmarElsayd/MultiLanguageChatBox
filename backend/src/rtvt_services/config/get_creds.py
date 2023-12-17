@@ -13,5 +13,6 @@ class DbCreds:
         for env_key in DB_ENV_LIST:
             setattr(self, env_key, os.getenv(env_key))
 
+    @property
     def to_dict(self):
         return vars(self)
