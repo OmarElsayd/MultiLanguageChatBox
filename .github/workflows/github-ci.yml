@@ -27,15 +27,16 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t omarelsayd/rtvt_app .
-        docker tag omarelsayd/rtvt_app:latest omarelsayd/rtvt_app:latest 
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/rtvt_app .
+        IMAGE_TAG=$(date +%Y%m%d%H%M%S)
+        docker tag ${{ secrets.DOCKER_USERNAME }}/rtvt_app:latest ${{ secrets.DOCKER_USERNAME }}/rtvt_app:${IMAGE_TAG} 
 
-#    - name: Login to Docker Hub
-#      if: github.event_name == 'push'
-#      run: |
-#        docker login -u ${{ secrets.DOCKER_USERNAME }}  -p ${{ secrets.DOCKER_PASSWORD }}
-#
-#    - name: Push Docker image
-#      if: github.event_name == 'push'
-#      run: |
-#        docker push ${{ secrets.DOCKER_USERNAME }}/rtvt_app:latest
+    - name: Login to Docker Hub
+      if: github.event_name == 'push'
+      run: |
+        docker login -u ${{ secrets.DOCKER_USERNAME }}  -p ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Push Docker image
+      if: github.event_name == 'push'
+      run: |
+        docker push ${{ secrets.DOCKER_USERNAME }}/rtvt_app:${IMAGE_TAG}
