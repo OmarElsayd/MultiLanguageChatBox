@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
-from rtvt_services.const import req_lib_path
+from rtvt_services.const import REQ_LIB_PATH
 
-with open(req_lib_path, 'r') as file:
+with open(REQ_LIB_PATH, 'r') as file:
     lib_list = [line.rstrip() for line in file.readlines()]
 
 setup(
