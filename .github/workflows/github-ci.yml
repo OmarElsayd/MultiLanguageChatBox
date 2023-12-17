@@ -30,12 +30,12 @@ jobs:
         docker build -t rtvt_app .
         docker tag omarelsayd/rtvt_app:latest omarelsayd/rtvt_app:latest 
 
-    - name: Login to Docker Hub
-      if: github.event_name == 'push'
-      run: |
-        docker login -u ${{ secrets.DOCKER_USERNAME }}  -p ${{ secrets.DOCKER_PASSWORD }}
-
-    - name: Push Docker image
-      if: github.event_name == 'push'
-      run: |
-        docker push ${{ secrets.DOCKER_USERNAME }}/rtvt_app:latest
+#    - name: Login to Docker Hub
+#      if: github.event_name == 'push'
+#      run: |
+#        docker login -u ${{ secrets.DOCKER_USERNAME }}  -p ${{ secrets.DOCKER_PASSWORD }}
+#
+#    - name: Push Docker image
+#      if: github.event_name == 'push'
+#      run: |
+#        docker push ${{ secrets.DOCKER_USERNAME }}/rtvt_app:latest
