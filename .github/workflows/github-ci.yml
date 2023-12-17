@@ -38,4 +38,4 @@ jobs:
     - name: Push Docker image
       if: github.event_name == 'push'
       run: |
-        docker push rtvt_app
+        docker push omarelsayd/rtvt_app:latest
