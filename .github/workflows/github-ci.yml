@@ -28,7 +28,7 @@ jobs:
     - name: Build Docker image
       run: |
         docker build -t rtvt_app .
-        docker tag rtvt_app ${{ secrets.DOCKER_USERNAME }}:latest
+        docker tag rtvt_app:latest rtvt_app:$(date +%Y%m%d%H%M%S)
 
     - name: Login to Docker Hub
       if: github.event_name == 'push'
@@ -38,4 +38,4 @@ jobs:
     - name: Push Docker image
       if: github.event_name == 'push'
       run: |
-        docker push ${{ secrets.DOCKER_USERNAME }}/rtvt_app:latest
+        docker push rtvt_app:$(date +%Y%m%d%H%M%S)
