@@ -19,7 +19,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install pylint
-        pip install -e 'backend/src'
 
     - name: Analysing the code with pylint
       run: |
@@ -38,4 +37,4 @@ jobs:
     - name: Push Docker image
       if: github.event_name == 'push'
       run: |
-        docker push rtvt_app:$(date +%Y%m%d%H%M%S)
+        docker push ${{ secrets.DOCKER_USERNAME }}/rtvt_app:$(date +%Y%m%d%H%M%S)
