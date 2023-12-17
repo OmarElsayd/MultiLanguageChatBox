@@ -13,4 +13,3 @@ def create_db_engine() -> sqlalchemy.engine:
     url = DB_URL.format(**db_creds.to_dict)
 
     return create_engine(url=url)
-
