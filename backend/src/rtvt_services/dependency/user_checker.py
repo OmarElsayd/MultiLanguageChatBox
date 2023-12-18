@@ -3,10 +3,10 @@ import logging
 
 from datetime import datetime
 from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
 
 from sqlalchemy.orm import Session
 from jose import jwt
-from fastapi.security import OAuth2PasswordBearer
 
 from rtvt_services.db_engine.session import get_session
 from rtvt_services.db_models.models import RtvtUsers

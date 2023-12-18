@@ -1,8 +1,8 @@
 import os
 from dataclasses import dataclass
-from passlib.context import CryptContext
-from datetime import datetime, timedelta
 from typing import Union, Any
+from datetime import datetime, timedelta
+from passlib.context import CryptContext
 from jose import jwt
 from rtvt_services.util.constant import (
     ALGORITHM,
@@ -34,7 +34,6 @@ def verify_users_password(password: str, hashed_pass: str) -> bool:
 
 @dataclass
 class JwtAuth:
-
     ACCESS_TOKEN_EXPIRE_MINUTES: int = ACCESS_TOKEN_EXPIRE_MINUTES
     REFRESH_TOKEN_EXPIRE_MINUTES: int = REFRESH_TOKEN_EXPIRE_MINUTES
     ALGORITHM: str = ALGORITHM

@@ -1,6 +1,6 @@
 # Author: Omar Elsayd
 from datetime import datetime
-from enum import Enum
+import enum
 
 from sqlalchemy import (
     Column,
@@ -15,7 +15,7 @@ from sqlalchemy.orm import relationship
 from rtvt_services.db_models.base import Base
 
 
-class Role(Enum):
+class Role(enum.Enum):
     Admin = "Admin"
     User = "User"
 
