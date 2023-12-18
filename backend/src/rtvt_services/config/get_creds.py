@@ -1,7 +1,7 @@
 import os
 
 from dataclasses import dataclass
-from rtvt_services.const import DB_ENV_LIST
+from rtvt_services.util.constant import DB_ENV_LIST
 
 
 @dataclass

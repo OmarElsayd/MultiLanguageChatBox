@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-from rtvt_services.const import REQ_LIB_PATH
+from rtvt_services.util.constant import REQ_LIB_PATH
 
 with open(REQ_LIB_PATH, 'r') as file:
     lib_list = [line.rstrip() for line in file.readlines()]
