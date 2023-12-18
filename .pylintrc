@@ -77,7 +77,7 @@ jobs=1
 # Control the amount of potential inferred values when inferring a single
 # object. This can help the performance when dealing with large functions or
 # complex, nested conditions.
-limit-inference-results=100
+limit-inference-results=110
 
 # List of plugins (as comma separated values of python module names) to load,
 # usually to register additional checkers.
@@ -337,7 +337,7 @@ indent-after-paren=4
 indent-string='    '
 
 # Maximum number of characters on a single line.
-max-line-length=100
+max-line-length=110
 
 # Maximum number of lines in a module.
 max-module-lines=1000
@@ -430,7 +430,8 @@ disable=raw-checker-failed,
         deprecated-pragma,
         use-symbolic-message-instead,
         use-implicit-booleaness-not-comparison-to-string,
-        use-implicit-booleaness-not-comparison-to-zero, C0114,C0116,W1514
+        use-implicit-booleaness-not-comparison-to-zero, C0114,C0116,W1514,C0115 , C0103, R0903, W0707, W0201,
+        W1203
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
