@@ -53,10 +53,10 @@ jobs:
       run: |
         docker login -u ${{ secrets.DOCKER_USERNAME }}  -p ${{ secrets.DOCKER_PASSWORD }}
 
-#    - name: Push Docker image
-#      if: github.event_name == 'push'
-#      run: |
-#        docker push ${{ secrets.DOCKER_USERNAME }}/rtvt_app:${{ env.IMAGE_TAG }}
+    - name: Push Docker image
+      if: github.event_name == 'push'
+      run: |
+        docker push ${{ secrets.DOCKER_USERNAME }}/rtvt_app:${{ env.IMAGE_TAG }}
 
     - name: Tear down Docker Compose
       run: docker-compose -f docker-compose.yaml down
