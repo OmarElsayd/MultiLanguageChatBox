@@ -41,7 +41,7 @@ jobs:
         pylint $(git ls-files '*.py')
 
     - name: Set up Docker Compose
-      run: docker-compose -f docker-compose.yaml up -d
+      run: docker-compose -f docker-compose.yaml up
 
     - name: Build Docker image
       run: |
