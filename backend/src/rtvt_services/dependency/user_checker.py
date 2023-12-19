@@ -16,7 +16,7 @@ from rtvt_services.util.payloads import TokenPayload, InCompingTokenPayload
 
 
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("User dep logger")
+logger = logging.getLogger("User Checker")
 
 OAuthSchema = OAuth2PasswordBearer(
     tokenUrl="/login",
@@ -27,7 +27,6 @@ jwt_auth = JwtAuth()
 
 async def get_curr_user(token: str = Depends(OAuthSchema), session: Session = Depends(get_session)):
     try:
-        logger.info(token)
         payload_dict = jwt.decode(
             token, jwt_auth.JWT_SECRET_KEY, algorithms=[ALGORITHM]
         )
@@ -42,7 +41,7 @@ async def get_curr_user(token: str = Depends(OAuthSchema), session: Session = De
             )
 
         user_data = InCompingTokenPayload(**json.loads(token_data.sub.replace("'", '"')))
-        logger.info(user_data)
+        logger.debug(user_data)
 
     except jwt.JWTError as error:
         logger.error(error)

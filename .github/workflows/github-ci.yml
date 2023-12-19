@@ -4,6 +4,18 @@ on: [push]
 
 env:
   IMAGE_TAG: $(date +%Y%m%d%H%M%S)
+  DB_HOST: ${{ secrets.DB_HOST }}
+  DB_PASS: ${{ secrets.DB_PASS }}
+  DB_PORT: ${{ secrets.DB_PORT }}
+  DB_USER: ${{ secrets.DB_USER }}
+  DB_NAME: ${{ secrets.DB_NAME }}
+  ssh_username: ${{ secrets.ssh_username }}
+  ssh_password: ${{ secrets.ssh_password }}
+  ssh_hostname: ${{ secrets.ssh_hostname }}
+  ssh_port: ${{ secrets.ssh_port }}
+  JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+  JWT_REFRESH_SECRET_KEY: ${{ secrets.JWT_REFRESH_SECRET_KEY }}
+  SSH: ${{ secrets.SSH }}
 
 jobs:
   build:
@@ -28,6 +40,9 @@ jobs:
       run: |
         pylint $(git ls-files '*.py')
 
+    - name: Set up Docker Compose
+      run: docker-compose -f docker-compose.yaml up -d
+
     - name: Build Docker image
       run: |
         docker build -t ${{ secrets.DOCKER_USERNAME }}/rtvt_app .
@@ -42,3 +57,6 @@ jobs:
       if: github.event_name == 'push'
       run: |
         docker push ${{ secrets.DOCKER_USERNAME }}/rtvt_app:${{ env.IMAGE_TAG }}
+
+    - name: Tear down Docker Compose
+      run: docker-compose -f docker-compose.yaml down
