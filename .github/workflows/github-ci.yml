@@ -59,4 +59,4 @@ jobs:
 #        docker push ${{ secrets.DOCKER_USERNAME }}/rtvt_app:${{ env.IMAGE_TAG }}
 
     - name: Tear down Docker Compose
-      run: docker-compose -f docker-compose.yml down
+      run: docker-compose -f docker-compose.yaml down
