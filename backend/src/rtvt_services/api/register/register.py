@@ -42,7 +42,7 @@ async def sign_up(creds_form: UserInput, session: Session = Depends(get_session)
             raise error
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Internal server error"
+            detail="Internal server error"
         )
 
 

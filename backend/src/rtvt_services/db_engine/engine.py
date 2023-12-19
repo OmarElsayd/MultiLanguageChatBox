@@ -47,7 +47,7 @@ def ssh_db_engine():
             engine = create_db_engine(f'0.0.0.0:{server.local_bind_port}')
             logger.info('SSH engine started')
             yield engine
-        except Exception as ssh_error:
+        except Exception as ssh_error:  # pylint: disable=W0718
             logger.error(ssh_error)
         finally:
             server.stop()
