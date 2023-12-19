@@ -6,7 +6,7 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Need to find a way to setup env var using a .sh file 
-# issue: script is bin/sh and I need bin/bash
+# issue: script is bin/sh and I need bin/bash -> could use GitHub secrets 
 # Copy the current directory contents into the container at /app
 COPY . /app
 
