@@ -18,7 +18,25 @@ env:
   SSH: ${{ secrets.SSH }}
 
 jobs:
-  build:
+  code-linting:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ "3.11" ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Analysing the code with pylint
+        run: |
+          python -m pip install --upgrade pip
+          pip install pylint
+          pylint $(git ls-files '*.py')
+
+  docker-build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -33,12 +51,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pylint
         pip install --no-cache-dir -e 'backend/src'
-
-    - name: Analysing the code with pylint
-      run: |
-        pylint $(git ls-files '*.py')
 
     - name: Set up Docker Compose
       run: docker-compose -f docker-compose.yaml up -d
@@ -64,3 +77,4 @@ jobs:
 
     - name: Tear down Docker Compose
       run: docker-compose -f docker-compose.yaml down
+
