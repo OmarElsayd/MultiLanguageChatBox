@@ -75,8 +75,6 @@ jobs:
       run: |
         docker push ${{ secrets.DOCKER_USERNAME }}/rtvt_app:${{ env.IMAGE_TAG }}
 
-    - name: Tear down Docker Compose
-      run: docker-compose -f docker-compose.yaml down
 
   unit-testing:
     runs-on: ubuntu-latest
@@ -93,16 +91,16 @@ jobs:
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-#    strategy:
-#      matrix:
-#        python-version: [ "3.11" ]
-#
+    strategy:
+      matrix:
+        python-version: [ "3.11" ]
+
     steps:
-#      - uses: actions/checkout@v3
-#      - name: Set up Python ${{ matrix.python-version }}
-#        uses: actions/setup-python@v3
-#        with:
-#          python-version: ${{ matrix.python-version }}
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
 
       - name: installing dependencies
         run: |
@@ -110,5 +108,7 @@ jobs:
           pip install --no-cache-dir -e 'backend/src'
 
       - name: Unit testing
-        run: |
-          pytest
+        run: pytest
+
+      - name: Tear down Docker Compose
+        run: docker-compose -f docker-compose.yaml down
