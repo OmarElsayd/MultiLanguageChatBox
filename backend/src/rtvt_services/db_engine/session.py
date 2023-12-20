@@ -10,7 +10,7 @@ logger = logging.getLogger("session making (session.py)")
 
 SSH = os.getenv('SSH')
 
-Session = sessionmaker()
+Session = sessionmaker(autocommit=False, autoflush=False)
 
 
 def get_session() -> Generator:
