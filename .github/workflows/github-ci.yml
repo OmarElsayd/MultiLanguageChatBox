@@ -2,20 +2,6 @@ name: RTVT CI/CD
 
 on: [push]
 
-env:
-  IMAGE_TAG: $(date +%Y%m%d%H%M%S)
-  DB_HOST: ${{ secrets.DB_HOST }}
-  DB_PASS: ${{ secrets.DB_PASS }}
-  DB_PORT: ${{ secrets.DB_PORT }}
-  DB_USER: ${{ secrets.DB_USER }}
-  DB_NAME: ${{ secrets.DB_NAME }}
-  ssh_username: ${{ secrets.ssh_username }}
-  ssh_password: ${{ secrets.ssh_password }}
-  ssh_hostname: ${{ secrets.ssh_hostname }}
-  ssh_port: ${{ secrets.ssh_port }}
-  JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-  JWT_REFRESH_SECRET_KEY: ${{ secrets.JWT_REFRESH_SECRET_KEY }}
-  SSH: ${{ secrets.SSH }}
 
 jobs:
   code-linting:
@@ -37,11 +23,28 @@ jobs:
           pip install pylint
           pylint $(git ls-files '*.py')
 
+
   docker-build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.11"]
+
+    env:
+      IMAGE_TAG: $(date +%Y%m%d%H%M%S)
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PASS: ${{ secrets.DB_PASS }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      ssh_username: ${{ secrets.ssh_username }}
+      ssh_password: ${{ secrets.ssh_password }}
+      ssh_hostname: ${{ secrets.ssh_hostname }}
+      ssh_port: ${{ secrets.ssh_port }}
+      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+      JWT_REFRESH_SECRET_KEY: ${{ secrets.JWT_REFRESH_SECRET_KEY }}
+      SSH: ${{ secrets.SSH }}
+
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
@@ -76,9 +79,22 @@ jobs:
 
   unit-testing:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          DB_HOST: localhost
+          DB_PASS: test_password
+          DB_PORT: 5432
+          DB_USER: test_user
+          DB_NAME: test_db
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     strategy:
       matrix:
         python-version: [ "3.11" ]
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
