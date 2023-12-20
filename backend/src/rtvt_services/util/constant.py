@@ -1,3 +1,5 @@
+import os
+
 DB_ENV_LIST = ["DB_HOST", "DB_PASS", "DB_PORT", "DB_NAME", "DB_USER"]
 SSH_ENV_LIST = ['ssh_password', 'ssh_username', 'ssh_hostname', 'ssh_port']
 
@@ -10,4 +12,4 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 REFRESH_TOKEN_EXPIRE_MINUTES = 45
 ALGORITHM = "HS256"
 
-DB_SCHEMA = 'rtvt'
+DB_SCHEMA = os.getenv('SCHEMA')
