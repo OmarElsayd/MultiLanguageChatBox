@@ -23,4 +23,3 @@ def db_test_env():
     for key, value in PYTEST_ENV_DICT.items():
         os.environ[key] = value
     return PYTEST_ENV_DICT
-

@@ -1,3 +1,4 @@
+# pylint: disable=W0613
 import os
 import pytest
 from sqlalchemy.engine import create_engine
