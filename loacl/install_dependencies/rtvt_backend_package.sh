@@ -1,2 +1,2 @@
 #!/bin/bash
-pip install -e 'rtvt_backend'
+pip install -e 'backend/src'
