@@ -28,7 +28,6 @@ def detect_language(text: str):
 def supported_lang(target_language: str):
     if target_language not in SUPPORTED_LANGS:
         raise TranslationException(
-            "% language is not supported", target_language
+            f"{target_language} language is not supported"
         )
     return target_language
-

@@ -1,7 +1,7 @@
 import logging
 from contextlib import contextmanager
-import sshtunnel
 import socket
+import sshtunnel
 import sqlalchemy
 
 from sqlalchemy.engine import create_engine
