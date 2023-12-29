@@ -8,7 +8,11 @@ from rtvt_services.config.google_cloud_init import GCloud
 gcloud = GCloud()
 gcloud.init()
 
-app = FastAPI()
+app = FastAPI(
+    title="Multi Language Chat Box API",
+    version='0.1.0',
+    summary=""
+)
 
 app.include_router(register.router)
 app.include_router(login.router)

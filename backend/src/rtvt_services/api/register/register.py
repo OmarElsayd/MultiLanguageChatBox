@@ -8,12 +8,13 @@ from sqlalchemy import or_
 
 from ...db_engine.session import get_session
 from ...db_models.models import Role, RtvtUsers
+from ...util.constant import API_V1_ROOT_PATH
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("Register logging")
 
 router = APIRouter(
-    prefix="/signup",
+    prefix=f"{API_V1_ROOT_PATH}/signup",
     tags=["signup"],
     responses={
         404: {"description": "Not found"}

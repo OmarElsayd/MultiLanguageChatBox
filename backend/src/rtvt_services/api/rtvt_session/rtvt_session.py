@@ -13,13 +13,14 @@ from rtvt_services.db_models.models import RtvtUsers, RtvtSessions, Transcripts
 from rtvt_services.dependency.exception_handler import raise_http_exception
 from rtvt_services.dependency.role_checker import user_pass
 from rtvt_services.security_auth.jwt_auth import get_hashed_password
+from rtvt_services.util.constant import API_V1_ROOT_PATH
 from rtvt_services.util.payloads import SessionPayload
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("RTVT SESSION API")
 
 router = APIRouter(
-    prefix="/session",
+    prefix=f"{API_V1_ROOT_PATH}/session",
     tags=["session"],
     responses={
         404: {"description": "Not found"}

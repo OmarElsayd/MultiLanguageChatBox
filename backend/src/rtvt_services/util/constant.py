@@ -14,6 +14,8 @@ ALGORITHM = "HS256"
 
 DB_SCHEMA = os.getenv('SCHEMA')
 
+API_V1_ROOT_PATH = "/api/v1"
+
 SUPPORTED_LANGS = [
   "en",
   "es",

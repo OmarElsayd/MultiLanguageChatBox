@@ -10,6 +10,7 @@ from rtvt_services.db_engine.session import get_session
 from rtvt_services.db_models.models import RtvtUsers
 from rtvt_services.dependency.role_checker import user_pass
 from rtvt_services.security_auth.jwt_auth import JwtAuth, verify_users_password
+from rtvt_services.util.constant import API_V1_ROOT_PATH
 from rtvt_services.util.payloads import TokenResponse
 
 logging.basicConfig(level=logging.INFO)
@@ -17,7 +18,7 @@ logger = logging.getLogger("login api")
 
 
 router = APIRouter(
-    prefix="/login",
+    prefix=f"{API_V1_ROOT_PATH}/login",
     tags=["login"],
     responses={
         404: {"description": "Not found"}
