@@ -6,7 +6,6 @@ import sqlalchemy
 
 from sqlalchemy.engine import create_engine
 from rtvt_services.config.get_creds import DbCreds, SshCreds
-from rtvt_services.dependency.exception_handler import SshDbEngineException
 from rtvt_services.util.constant import DB_URL, SSH_DB_URL
 
 logging.basicConfig(level=logging.INFO)
@@ -20,7 +19,7 @@ def get_local_ip():
             local_ip = s.getsockname()[0]
         return local_ip
     except socket.error as e:
-        print(f"Error getting local IP address: {e}")
+        logger.error(f"Error getting local IP address: {e}")
         return None
 
 
@@ -63,6 +62,5 @@ def ssh_db_engine():
             yield engine
         except Exception as ssh_error:  # pylint: disable=W0718
             logger.error(ssh_error)
-            raise SshDbEngineException(ssh_error)
         finally:
             server.stop()
