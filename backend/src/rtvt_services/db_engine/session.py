@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from rtvt_services.db_engine.engine import create_db_engine, ssh_db_engine
 
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("session making (session.py)")
+logger = logging.getLogger("SESSION MAKER (session.py)")
 
 SSH = os.getenv('SSH')
 
