@@ -114,7 +114,8 @@ def get_all_sessions(
 @router.put(
     "/{session_code}/end",
     status_code=status.HTTP_200_OK,
-    response_class=JSONResponse
+    response_class=JSONResponse,
+    dependencies=[Depends(user_pass)]
 )
 def end_session(session_code: str, db_session: Session = Depends(get_session)):
     try:
