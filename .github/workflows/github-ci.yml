@@ -45,6 +45,12 @@ jobs:
       JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
       JWT_REFRESH_SECRET_KEY: ${{ secrets.JWT_REFRESH_SECRET_KEY }}
       SSH: ${{ secrets.SSH }}
+      TRANSLATION_API_K: ${{TRANSLATION_API_K}}
+      PROJECT_ID: ${{PROJECT_ID}}
+      GOOGLE_APPLICATION_CREDENTIALS: ${{GOOGLE_APPLICATION_CREDENTIALS}}
+      GOOGLE_CLOUD_PROJECT: ${{GOOGLE_CLOUD_PROJECT}}
+      GOOGLE_ACCOUNT: ${{GOOGLE_ACCOUNT}}
+      SCHEMA: ${{SCHEMA}}
 
     steps:
     - uses: actions/checkout@v3
