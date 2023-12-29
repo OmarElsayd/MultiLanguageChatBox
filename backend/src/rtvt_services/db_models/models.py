@@ -9,9 +9,12 @@ from sqlalchemy import (
     Text,
     ForeignKey,
     DateTime,
-    Enum
+    Enum,
+    JSON,
+    Boolean
 )
 from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import ARRAY
 from rtvt_services.db_models.base import Base
 
 
@@ -33,14 +36,25 @@ class RtvtUsers(Base):
     created_at = Column(DateTime, default=datetime.utcnow())
 
 
+class Transcripts(Base):
+    __tablename__ = 'transcripts'
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    body = Column(JSON, nullable=True)
+
+
 class RtvtSessions(Base):
     __tablename__ = 'rtvt_sessions'
 
     id = Column(Integer, primary_key=True, nullable=False)
     user_id = Column(Integer, ForeignKey(RtvtUsers.id), nullable=False)
-    transcript = Column(Text, nullable=False)
-    start_at = Column(DateTime, nullable=False)
-    end_at = Column(DateTime, nullable=False)
+    participants = Column(ARRAY(String, dimensions=1), nullable=False)
+    session_passcode = Column(String(100), nullable=True)
+    is_call = Column(Boolean, nullable=False, default=False)
+    end_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow())
+    transcript_id = Column(Integer, ForeignKey(Transcripts.id), nullable=False)
+    session_code = Column(String(20), nullable=False)
 
     users = relationship(RtvtUsers)
+    transcripts = relationship(Transcripts)

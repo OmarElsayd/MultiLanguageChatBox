@@ -30,3 +30,9 @@ class TokenResponse(BaseModel):
     status_code: int
     access_token: str
     token_type: str = "bearer"
+
+
+class SessionPayload(BaseModel):
+    invitee: str
+    passcode: str = None
+    is_call: bool = False

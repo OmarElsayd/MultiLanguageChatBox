@@ -1,5 +1,6 @@
 import logging
 from contextlib import contextmanager
+import socket
 import sshtunnel
 import sqlalchemy
 
@@ -9,6 +10,17 @@ from rtvt_services.util.constant import DB_URL, SSH_DB_URL
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("engine.py")
+
+
+def get_local_ip():
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+            s.connect(('1.1.1.1', 80))
+            local_ip = s.getsockname()[0]
+        return local_ip
+    except socket.error as e:
+        logger.error(f"Error getting local IP address: {e}")
+        return None
 
 
 def create_db_engine(ssh_port=None) -> sqlalchemy.engine:
@@ -44,7 +56,8 @@ def ssh_db_engine():
         try:
             server.start()
             logger.info('SSH Tunnel started')
-            engine = create_db_engine(f'0.0.0.0:{server.local_bind_port}')
+            local_ip = get_local_ip()
+            engine = create_db_engine(f'{local_ip}:{server.local_bind_port}')
             logger.info('SSH engine started')
             yield engine
         except Exception as ssh_error:  # pylint: disable=W0718
