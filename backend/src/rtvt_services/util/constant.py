@@ -1,4 +1,5 @@
 import os
+API_V1_BASE_ROOT = '/mlcb/api/v1'
 
 DB_ENV_LIST = ["DB_HOST", "DB_PASS", "DB_PORT", "DB_NAME", "DB_USER"]
 SSH_ENV_LIST = ['ssh_password', 'ssh_username', 'ssh_hostname', 'ssh_port']
@@ -10,6 +11,8 @@ REQ_LIB_PATH = 'requirements.txt'
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 REFRESH_TOKEN_EXPIRE_MINUTES = 45
+NUM_SESSION_CODE_CHAR = 20
+
 ALGORITHM = "HS256"
 
 DB_SCHEMA = os.getenv('SCHEMA')
@@ -55,3 +58,6 @@ SUPPORTED_LANGS = [
 ]
 
 MAX_LENGTH_PER_STR = 1000
+
+# ws broadcast types
+WS_MESSAGE = 'message'
