@@ -8,16 +8,15 @@ from jose.jwt import JWTError
 
 from rtvt_services.db_engine.session import get_session
 from rtvt_services.db_models.models import RtvtUsers
-from rtvt_services.dependency.role_checker import user_pass
 from rtvt_services.security_auth.jwt_auth import JwtAuth, verify_users_password
+from rtvt_services.util.constant import API_V1_BASE_ROOT
 from rtvt_services.util.payloads import TokenResponse
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("login api")
 
-
 router = APIRouter(
-    prefix="/login",
+    prefix=f"{API_V1_BASE_ROOT}/login",
     tags=["login"],
     responses={
         404: {"description": "Not found"}
@@ -28,7 +27,7 @@ jwt_auth = JwtAuth()
 
 
 @router.post(
-    "",
+    "/",
     response_model=TokenResponse,
     status_code=status.HTTP_200_OK,
 )
@@ -61,11 +60,7 @@ async def login(creds_form: OAuth2PasswordRequestForm = Depends(), session: Sess
             detail=str(jwt_error)
         )
 
-
-@router.get(
-    "/profile"
-)
-async def get_info(user: RtvtUsers = Depends(user_pass)):
-    return {
-        "profile": user
-    }
+# @router.get( "/profile/{session_code}", ) async def get_info(session_code: str, user: RtvtUsers = Depends(
+# user_pass), db_session: Session = Depends(get_session)):
+#
+#     return v

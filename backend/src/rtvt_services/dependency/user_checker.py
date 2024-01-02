@@ -11,7 +11,7 @@ from jose import jwt
 from rtvt_services.db_engine.session import get_session
 from rtvt_services.db_models.models import RtvtUsers
 from rtvt_services.security_auth.jwt_auth import JwtAuth
-from rtvt_services.util.constant import ALGORITHM
+from rtvt_services.util.constant import ALGORITHM, API_V1_BASE_ROOT
 from rtvt_services.util.payloads import TokenPayload, InCompingTokenPayload
 
 
@@ -19,7 +19,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("User Checker")
 
 OAuthSchema = OAuth2PasswordBearer(
-    tokenUrl="/login",
+    tokenUrl=f"{API_V1_BASE_ROOT}/login/",
     scheme_name="JWT",
 )
 jwt_auth = JwtAuth()

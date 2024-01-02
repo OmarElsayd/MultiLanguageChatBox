@@ -14,6 +14,34 @@ class TokenPayload:
     exp: float
 
 
+@dataclass
+class WsMessagePayload:
+    type: str
+    from_: str
+    to_: str
+    content: str
+    lang: str
+
+    @property
+    def dict(self):
+        return vars(self)
+
+
+@dataclass
+class InComingWsMessagePayload:
+    type: str
+    from_: str
+    to_: str
+    to_user_id: int
+    content: str
+    source_lang: str
+    received_at: str
+
+    @property
+    def dict(self):
+        return vars(self)
+
+
 class UserInput(BaseModel):
     user_name: str
     email: str

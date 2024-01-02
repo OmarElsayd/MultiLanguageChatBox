@@ -18,8 +18,8 @@ def get_local_ip():
             s.connect(('1.1.1.1', 80))
             local_ip = s.getsockname()[0]
         return local_ip
-    except socket.error as e:
-        logger.error(f"Error getting local IP address: {e}")
+    except socket.error as error:
+        logger.error(f"Error getting local IP address: {error}")
         return None
 
 

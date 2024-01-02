@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y \
 
 ENV PATH $PATH:/usr/local/gcloud/google-cloud-sdk/bin
 
+RUN pip install --upgrade setuptools
 RUN pip install --no-cache-dir -e 'backend/src'
 
 EXPOSE 8000
