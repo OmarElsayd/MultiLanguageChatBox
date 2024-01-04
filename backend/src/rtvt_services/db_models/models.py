@@ -41,6 +41,7 @@ class Transcripts(Base):
 
     id = Column(Integer, primary_key=True, nullable=False)
     body = Column(JSON, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow())
 
 
 class RtvtSessions(Base):
@@ -56,5 +57,18 @@ class RtvtSessions(Base):
     transcript_id = Column(Integer, ForeignKey(Transcripts.id), nullable=False)
     session_code = Column(String(20), nullable=False)
 
-    users = relationship(RtvtUsers)
-    transcripts = relationship(Transcripts)
+    users = relationship("RtvtUsers")
+    transcripts = relationship("Transcripts")
+
+
+class UsersSession(Base):
+    __tablename__ = 'users_session'
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    user_id = Column(Integer, ForeignKey(RtvtUsers.id), nullable=False)
+    session_id = Column(Integer, ForeignKey(RtvtSessions.id), nullable=False)
+    joined_at = Column(DateTime, default=datetime.utcnow())
+    spoken_lang = Column(String(5), nullable=False)
+
+    users = relationship("RtvtUsers")
+    sessions = relationship("RtvtSessions")
