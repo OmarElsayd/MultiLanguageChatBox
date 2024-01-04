@@ -35,7 +35,7 @@ class InComingWsMessagePayload:
     to_user_id: int
     content: str
     source_lang: str
-    received_at: str
+    created_at: str
 
     @property
     def dict(self):
@@ -61,6 +61,9 @@ class TokenResponse(BaseModel):
 
 
 class SessionPayload(BaseModel):
+    """
+    invitee: user_name
+    """
     invitee: str
     passcode: str = None
     is_call: bool = False

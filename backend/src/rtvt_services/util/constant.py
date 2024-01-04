@@ -61,3 +61,26 @@ MAX_LENGTH_PER_STR = 1000
 
 # ws broadcast types
 WS_MESSAGE = 'message'
+
+TRANSCRIPTS_BODY = {
+  "body": {
+    "user1": {
+      "REPLACE_WITH_USER1_USERNAME": {
+        "transcript_text": [],
+        "source_lang": ""
+      }
+    },
+    "user2": {
+      "REPLACE_WITH_USER1_USERNAME": {
+        "transcript_text": [],
+        "source_lang": ""
+      }
+    }
+  },
+  "info": {
+    "user1": "",
+    "user2": "",
+    "user1_lang": "",
+    "user2_lang": ""
+  }
+}

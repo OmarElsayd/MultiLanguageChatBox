@@ -8,6 +8,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
+from rtvt_services.api.util.util import verify_invitee, init_transcript_body
 from rtvt_services.db_engine.session import get_session
 from rtvt_services.db_models.models import RtvtUsers, RtvtSessions, Transcripts
 from rtvt_services.dependency.exception_handler import raise_http_exception
@@ -38,21 +39,11 @@ async def start_chat_session(
         user: RtvtUsers = Depends(user_pass),
         db_session: Session = Depends(get_session)
 ):
-    invitee = (
-        db_session.query(RtvtUsers).filter_by(
-            user_name=session_payload.invitee
-        ).first())
-    logger.info(invitee.user_name)
+    await verify_invitee(db_session, session_payload, user)
+    transcript_body = init_transcript_body(session_payload, user)
 
-    if not invitee or user.user_name == session_payload.invitee:
-        message = "Didn't find user"
-        logger.info(message)
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=message,
-        )
     try:
-        new_transcript = Transcripts(body={})
+        new_transcript = Transcripts(body=transcript_body)
         db_session.add(new_transcript)
         db_session.commit()
 

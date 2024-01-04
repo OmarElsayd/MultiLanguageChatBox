@@ -1,9 +1,14 @@
-import json
 import logging
 from fastapi import WebSocket, WebSocketDisconnect, APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from rtvt_services.api.util.util import verify_session_invitation, verify_supported_language
+from rtvt_services.api.util.rtvt_translate import translate_text_
+from rtvt_services.api.util.util import (
+    verify_session_invitation,
+    verify_supported_language,
+    update_users_session,
+    update_transcript_body_text,
+)
 from rtvt_services.db_engine.session import get_session
 from rtvt_services.db_models.models import RtvtUsers
 from rtvt_services.dependency.exception_handler import BroadcastException, InvalidInputException
@@ -23,12 +28,28 @@ router = APIRouter(
 )
 
 connected_clients: dict[str: dict] = {}
+"""
+    example connected_clients structure:
+    {
+        session_code+user_id:
+            {
+                'ws_user': user,
+                'ws_connection': websocket,
+                'used_language': used_language
+            }
+    }
+"""
 
 
 class ChatManager:
     @classmethod
     async def connect(
-            cls, websocket: WebSocket, session_code: str, user: RtvtUsers, db_session: Session, used_language: str
+            cls,
+            websocket: WebSocket,
+            session_code: str,
+            user: RtvtUsers,
+            db_session: Session,
+            used_language: str
     ):
         """
 
@@ -42,11 +63,13 @@ class ChatManager:
         if connected_clients[session_code + str(user.id)]:
             logger.info(f"{user.first_name} {user.last_name} is in the chat already!")
             return
-        if not verify_session_invitation(user, db_session, session_code):
+        verify_session = verify_session_invitation(user, db_session, session_code)
+        if not verify_session:
             return
+        update_users_session(user, verify_session, db_session, used_language)
         await websocket.accept()
         connected_clients[session_code + str(user.id)] = {
-            'ws_user': user, 'ws_connection': websocket, 'used_language': used_language
+            'ws_user': user, 'ws_connection': websocket, 'used_language': used_language,
         }
         await cls.broadcast_connection_message(
             f"{user.first_name} {user.last_name} has joined the chat",
@@ -92,32 +115,29 @@ class ChatManager:
 
     @classmethod
     async def broadcast_chat_message(
-            cls, from_user: RtvtUsers, session_code, message_payload: InComingWsMessagePayload
+            cls, session_code, message_payload: InComingWsMessagePayload
     ):
         try:
             client_ws = connected_clients[session_code + str(message_payload.to_user_id)]["ws_connection"]
-            to_user_model = connected_clients[session_code + str(message_payload.to_user_id)]["ws_user"]
+            language_model = connected_clients[session_code + str(
+                message_payload.to_user_id
+            )]["used_language"]
             message_payload = WsMessagePayload(
                 type=WS_MESSAGE,
-                from_="{first_name} {last_name}".format(
-                    first_name=from_user.first_name, last_name=from_user.last_name
-                ),
-                to_="{first_name} {last_name}".format(
-                    first_name=to_user_model.first_name, last_name=to_user_model.last_name
-                ),
-                content=message_payload.content
+                from_=message_payload.from_,
+                to_=message_payload.to_,
+                content=message_payload.content,
+                lang=language_model
             )
-            await client_ws.send_text(message_payload.dict)
+            await client_ws.send_json(message_payload.dict)
         except BroadcastException as ws_error:
             logger.error(ws_error)
             raise BroadcastException(ws_error)
 
     @classmethod
     def parse_ws_message(cls, raw_message) -> InComingWsMessagePayload:
-        message_data = json.loads(raw_message)
-
-        if message_data.get("type") == WS_MESSAGE:
-            return InComingWsMessagePayload(**message_data)
+        if raw_message.get("type") == WS_MESSAGE:
+            return InComingWsMessagePayload(**raw_message)
         logger.error("type is not a message")
         raise InvalidInputException("type is not a message")
 
@@ -134,14 +154,23 @@ async def websocket_endpoint(
     await ChatManager.connect(websocket, session_code, from_user, db_session, used_language)
     try:
         while True:
-            data = await websocket.receive_text()
-            parsed_ws_message = ChatManager.parse_ws_message(data)
-            # process ws message and translate if needed
+            raw_json_data = await websocket.receive_json()
+            parsed_ws_message = ChatManager.parse_ws_message(raw_json_data)
+            translated_text = translate_text_(
+                source_language_code=parsed_ws_message.source_lang,
+                target_language_code=connected_clients[session_code + str(
+                    parsed_ws_message.to_user_id
+                )]["used_language"],
+                text=parsed_ws_message.content
+            )
+
+            await update_transcript_body_text(
+                db_session, session_code, parsed_ws_message, translated_text, from_user
+            )
+
+            parsed_ws_message.content = translated_text
             await ChatManager.broadcast_chat_message(
-                from_user=from_user, session_code=session_code, message_payload=parsed_ws_message
+                session_code=session_code, message_payload=parsed_ws_message
             )
     except WebSocketDisconnect:
         await ChatManager.disconnect(session_code, from_user)
-
-
-
