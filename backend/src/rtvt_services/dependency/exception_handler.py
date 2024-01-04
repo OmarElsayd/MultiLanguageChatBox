@@ -1,6 +1,10 @@
 from fastapi import HTTPException, status
 
 
+class DbSessionException(Exception):
+    pass
+
+
 class TranslationException(Exception):
     pass
 
