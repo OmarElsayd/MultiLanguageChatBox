@@ -4,7 +4,10 @@
       "user_first_name": {
         "transcript_text": [
           {
-            "text": "text",
+            "text": {
+              "before": "example",
+              "after": "example"
+            },
             "time": "time"
           }
         ],
@@ -15,7 +18,10 @@
       "user_first_name": {
         "transcript_text": [
           {
-            "text": "text",
+            "text": {
+              "before": "example",
+              "after": "example"
+            },
             "time": "time"
           }
         ],
