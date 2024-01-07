@@ -1,0 +1,19 @@
+.mat-elevation-z8-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+  }
+  
+  
+  .mat-mdc-row .mat-mdc-cell {
+    cursor: pointer;
+  }
+  
+  .mat-mdc-row:hover .mat-mdc-cell {
+    background: rgba(0, 0, 0, 0.2);
+  }
+  
+  .demo-row-is-clicked {
+    font-weight: bold;
+  }

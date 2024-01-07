@@ -1,0 +1,39 @@
+<div *ngIf="new_session_data_input" class="center-container">
+    <form (ngSubmit)="newSessionSubmit()">
+      <mat-form-field>
+        <input matInput placeholder="Pass Code" [(ngModel)]="passCode" name="passCode" required>
+      </mat-form-field>
+  
+      <mat-form-field>
+        <input matInput placeholder="User Name" [(ngModel)]="userName" name="userName" required>
+      </mat-form-field>
+  
+      <div>
+        <mat-slide-toggle [(ngModel)]="isSessionCall" name="isSessionCall">Is The Session a Call?</mat-slide-toggle>
+      </div>
+  
+      <button mat-raised-button color="primary" type="submit">Submit</button>
+    </form>
+  </div>
+  
+
+
+<div *ngIf="ask_to_join_contanier" class="center-container">
+    <form (ngSubmit)="join_session()">
+      <mat-form-field>
+        <input matInput placeholder="Session Code" [(ngModel)]="session_code" name="session_code" required>
+      </mat-form-field>
+  
+      <mat-form-field>
+        <input matInput placeholder="Select Language" [(ngModel)]="selectedLanguage" name="selectedLanguage" [matAutocomplete]="auto" required>
+        <mat-autocomplete color="accent" #auto="matAutocomplete">
+          <mat-option *ngFor="let language of availableLanguages" [value]="language.isoCode">
+            {{ language.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+  
+      <button mat-raised-button color="primary" type="submit">Join</button>
+    </form>
+  </div>
+  
