@@ -11,7 +11,7 @@ REQ_LIB_PATH = 'requirements.txt'
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 REFRESH_TOKEN_EXPIRE_MINUTES = 45
-NUM_SESSION_CODE_CHAR = 20
+NUM_SESSION_CODE_CHAR = 6
 
 ALGORITHM = "HS256"
 
@@ -71,7 +71,7 @@ TRANSCRIPTS_BODY = {
       }
     },
     "user2": {
-      "REPLACE_WITH_USER1_USERNAME": {
+      "REPLACE_WITH_USER2_USERNAME": {
         "transcript_text": [],
         "source_lang": ""
       }
