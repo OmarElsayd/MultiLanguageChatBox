@@ -94,10 +94,11 @@ def update_users_session(
 
 def update_transcript_body_lang(session, session_query, spoken_lang, user) -> None:
     try:
-        transcript_body: dict = session.query(Transcripts.body).filter(
+        transcript_body_tuple: dict = session.query(Transcripts.body).filter(
             Transcripts.id == session_query.transcript_id
         ).one()
-
+        transcript_body = transcript_body_tuple[0]
+        logger.info(transcript_body)
         user_key = next(
             (key for key, value in transcript_body['info'].items() if value == user.user_name),
             None
@@ -111,9 +112,13 @@ def update_transcript_body_lang(session, session_query, spoken_lang, user) -> No
             raise DbSessionException("Please contact your IT admin")
 
         logger.info("Found user in the transcript body dict, changing user lang")
-        transcript_body["info"][user_key + "_lang"] = spoken_lang
-        transcript_body['body'][user_key][user.user_name]['source_lang'] = spoken_lang
-        logger.info("Changing user lang in transcript body has been done")
+        if isinstance(transcript_body["info"], dict):
+            transcript_body["info"][user_key + "_lang"] = spoken_lang
+            transcript_body['body'][user_key][user.user_name]['source_lang'] = spoken_lang
+            logger.info("Changing user lang in transcript body has been done")
+        else:
+            logger.info(transcript_body)
+            logger.error("transcript_body['info'] is not a dictionary")
 
         session.commit()
     except NoResultFound:

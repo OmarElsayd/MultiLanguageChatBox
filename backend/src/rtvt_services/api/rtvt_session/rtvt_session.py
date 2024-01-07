@@ -148,7 +148,10 @@ def get_session_history(
         )
 
         if result:
-            return result.body
+            return {
+                "status_code": status.HTTP_200_OK,
+                "transcript": result.body
+            }
 
     except HTTPException as error:
         logger.error(error)

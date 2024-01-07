@@ -2,6 +2,7 @@ import logging
 from fastapi import WebSocket, WebSocketDisconnect, APIRouter, Depends
 from sqlalchemy.orm import Session
 
+from rtvt_services.dependency.user_checker import get_curr_user
 from rtvt_services.api.util.rtvt_translate import translate_text_
 from rtvt_services.api.util.util import (
     verify_session_invitation,
@@ -12,7 +13,6 @@ from rtvt_services.api.util.util import (
 from rtvt_services.db_engine.session import get_session
 from rtvt_services.db_models.models import RtvtUsers
 from rtvt_services.dependency.exception_handler import BroadcastException, InvalidInputException
-from rtvt_services.dependency.role_checker import user_pass
 from rtvt_services.util.constant import API_V1_BASE_ROOT, WS_MESSAGE
 from rtvt_services.util.payloads import WsMessagePayload, InComingWsMessagePayload
 
@@ -60,7 +60,7 @@ class ChatManager:
         :param db_session:
         :return:
         """
-        if connected_clients[session_code + str(user.id)]:
+        if connected_clients.get(session_code + str(user.id)):
             logger.info(f"{user.first_name} {user.last_name} is in the chat already!")
             return
         verify_session = verify_session_invitation(user, db_session, session_code)
@@ -74,6 +74,7 @@ class ChatManager:
         await cls.broadcast_connection_message(
             f"{user.first_name} {user.last_name} has joined the chat",
             session_code,
+            str(user.id)
         )
 
     @classmethod
@@ -91,12 +92,13 @@ class ChatManager:
         await cls.broadcast_connection_message(
             f"{user.first_name} {user.last_name}  has left the chat",
             session_code,
+            str(user.id)
         )
         del connected_clients[session_code + str(user.id)]
         logger.info(f"disconnected {session_code + str(user.id)} successfully")
 
     @classmethod
-    async def broadcast_connection_message(cls, message: str, session_code: str):
+    async def broadcast_connection_message(cls, message: str, session_code: str, user_id: str):
         """
 
         :param message:
@@ -106,9 +108,9 @@ class ChatManager:
         try:
             logger.info("Getting evey user in web socket session to send connection message")
             for session_id, session_ws in connected_clients.items():
-                if session_id.startwith(session_code):
+                if session_id.startswith(session_code) and not session_id.endswith(user_id):
                     logger.info(f"found ws session {session_id}, for session code {session_ws}")
-                    await session_ws.send_text(message)
+                    await session_ws['ws_connection'].send_json(message)
         except BroadcastException as ws_error:
             logger.error(ws_error)
             raise BroadcastException(ws_error)
@@ -142,14 +144,15 @@ class ChatManager:
         raise InvalidInputException("type is not a message")
 
 
-@router.websocket("/{session_code}/ws")
+@router.websocket("/{session_code}/ws/{used_language}/{token}")
 async def websocket_endpoint(
         session_code: str,
         used_language: str,
+        token: str,
         websocket: WebSocket,
-        from_user: RtvtUsers = Depends(user_pass),
         db_session: Session = Depends(get_session),
 ):
+    from_user = await get_curr_user(token, db_session)
     verify_supported_language(used_language)
     await ChatManager.connect(websocket, session_code, from_user, db_session, used_language)
     try:

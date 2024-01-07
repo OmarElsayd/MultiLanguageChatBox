@@ -53,7 +53,7 @@ async def get_curr_user(token: str = Depends(OAuthSchema), session: Session = De
     return validate_user(session, user_data)
 
 
-def validate_user(session, user_data):
+def validate_user(session, user_data) -> RtvtUsers:
     try:
         user = session.query(RtvtUsers).filter(RtvtUsers.id == user_data.id).first()
 
