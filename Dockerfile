@@ -19,4 +19,4 @@ RUN pip install --no-cache-dir -e 'backend/src'
 
 EXPOSE 8000
 
-CMD ["uvicorn", "backend.src.rtvt_services.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["uvicorn", "backend.src.mlcb_services.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
