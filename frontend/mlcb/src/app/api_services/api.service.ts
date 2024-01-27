@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable, catchError, map, of } from 'rxjs';
-import { API_ROUTE, BASE_DOMAIN_ROUTE } from './const';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = `https://${BASE_DOMAIN_ROUTE}/${API_ROUTE}`;
+  API_ROUTE = environment.API_ROUTE;
+  BASE_DOMAIN_ROUTE = environment.BASE_DOMAIN_ROUTE;
+
+  private apiUrl = `https://${this.BASE_DOMAIN_ROUTE}/${this.API_ROUTE}`;
   private showSpinnerSubject = new BehaviorSubject<boolean>(false);
   showSpinner$ = this.showSpinnerSubject.asObservable();
   join_session_from_home: boolean = false;

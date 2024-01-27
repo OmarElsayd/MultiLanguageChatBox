@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { API_ROUTE, BASE_DOMAIN_ROUTE } from './const';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebSocketService {
+  API_ROUTE = environment.API_ROUTE;
+  BASE_DOMAIN_ROUTE = environment.BASE_DOMAIN_ROUTE;
   private socket!: WebSocket;
   constructor ( private apiService: ApiService){}
   connect(sessionCode: string, usedLanguage: string): Observable<any> {
-    const url = `wss://${BASE_DOMAIN_ROUTE}/${API_ROUTE}/chat_ws/${sessionCode}/ws/${usedLanguage}/${this.apiService.getToken()}`;
+    const url = `wss://${this.BASE_DOMAIN_ROUTE}/${this.API_ROUTE}/chat_ws/${sessionCode}/ws/${usedLanguage}/${this.apiService.getToken()}`;
 
     this.socket = new WebSocket(url);
 
