@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
+  isJoinSession: boolean = false;
   constructor(private apiService: ApiService, private router: Router) {}
   
   sessions_histroy(){
@@ -16,5 +17,9 @@ export class HomeComponent {
 
   new_session(){
     this.router.navigate(['/new_session'])
+  }
+  joinSession() {
+    this.apiService.setJoinSession(true);
+    this.router.navigate(["/new_session"])
   }
 }

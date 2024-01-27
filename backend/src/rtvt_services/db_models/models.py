@@ -29,6 +29,7 @@ class RtvtUsers(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     user_name = Column(String(50), nullable=False)
     email = Column(String(100), nullable=False)
+    is_confirmed = Column(Boolean, default=False, nullable=False)
     password = Column(Text, nullable=False)
     first_name = Column(String(20), nullable=False)
     last_name = Column(String(20), nullable=False)
@@ -49,7 +50,7 @@ class RtvtSessions(Base):
 
     id = Column(Integer, primary_key=True, nullable=False)
     user_id = Column(Integer, ForeignKey(RtvtUsers.id), nullable=False)
-    participants = Column(ARRAY(String, dimensions=1), nullable=False)
+    participants = Column(ARRAY(String), nullable=False)
     session_passcode = Column(String(100), nullable=True)
     is_call = Column(Boolean, nullable=False, default=False)
     end_at = Column(DateTime, nullable=True)

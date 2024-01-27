@@ -1,17 +1,22 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, Observable, catchError, map, of } from 'rxjs';
+import { API_ROUTE, BASE_DOMAIN_ROUTE } from './const';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'http://127.0.0.1:8000/mlcb/api/v1';
+  private apiUrl = `https://${BASE_DOMAIN_ROUTE}/${API_ROUTE}`;
   private showSpinnerSubject = new BehaviorSubject<boolean>(false);
   showSpinner$ = this.showSpinnerSubject.asObservable();
+  join_session_from_home: boolean = false;
 
   constructor(private http: HttpClient) {}
 
+  setJoinSession(value: boolean): void {
+    this.join_session_from_home = value;
+  }
   getToken(): string | null {
     return localStorage.getItem('Authorization');
   }
@@ -24,15 +29,23 @@ export class ApiService {
     localStorage.removeItem('Authorization');
   }
 
-  isTokenExpired(): boolean {
+  isTokenExpired(): Observable<boolean> {
+    const token = this.getToken();
+    if (!token) {
+      return of(true);
+    }
+
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + this.getToken(),
-    })
-    let curr_user = this.http.get<boolean>(`${this.apiUrl}/verify_access`, { headers } );
-    if (curr_user){ return false }
-    return true
+      'Authorization': 'Bearer ' + token,
+    });
+
+    return this.http.get<boolean>(`${this.apiUrl}/verify_access`, { headers }).pipe(
+      map((response: any) => !response),
+      catchError(() => of(true))
+    );
   }
+
 
 
   login(username: string, password: string): Observable<any> {
@@ -43,13 +56,46 @@ export class ApiService {
     return this.http.post<any>(`${this.apiUrl}/login/`, formData);
   }
 
-  session_history(){
+  signUp(
+    username: string,
+    password: string,
+    email: string,
+    first_name: string,
+    last_name: string
+  ) {
+    const data = {
+      user_name: username,
+      password: password,
+      email: email,
+      first_name: first_name,
+      last_name: last_name
+    };
+  
+    return this.http.put<any>(`${this.apiUrl}/signup`, data);
+  }
+  
+
+  confirmEmail(confirmCode: string){
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<any>(`${this.apiUrl}/signup/conf_email?token=${confirmCode}`, {headers});
+  }
+  
+  session_history(page: number = 1, pageSize: number = 5) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + this.getToken(),
     });
-    return this.http.get<any>(`${this.apiUrl}/session/all`, { headers });
+  
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('pagesize', pageSize.toString());
+  
+    return this.http.get<any>(`${this.apiUrl}/session/all`, { headers, params });
   }
+  
 
   get_session_histroy(row: any){
     const headers = new HttpHeaders({
@@ -69,6 +115,15 @@ export class ApiService {
       "passcode": passCode,
       "is_call": is_call
     },
+    { headers })
+  }
+
+  getUsersInfo(session_code: string){
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + this.getToken(),
+    });
+    return this.http.get<any>(`${this.apiUrl}/session/${session_code}/info`, 
     { headers })
   }
 

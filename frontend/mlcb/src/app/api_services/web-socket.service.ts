@@ -1,7 +1,7 @@
-import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
+import { API_ROUTE, BASE_DOMAIN_ROUTE } from './const';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ export class WebSocketService {
   private socket!: WebSocket;
   constructor ( private apiService: ApiService){}
   connect(sessionCode: string, usedLanguage: string): Observable<any> {
-    const url = `ws://127.0.0.1:8000/mlcb/api/v1/chat_ws/${sessionCode}/ws/${usedLanguage}/${this.apiService.getToken()}`;
+    const url = `wss://${BASE_DOMAIN_ROUTE}/${API_ROUTE}/chat_ws/${sessionCode}/ws/${usedLanguage}/${this.apiService.getToken()}`;
 
     this.socket = new WebSocket(url);
 

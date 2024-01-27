@@ -1,6 +1,18 @@
 <router-outlet>
-    <div class="spinner-container" *ngIf="apiService.showSpinner$ | async">
-        <mat-spinner></mat-spinner>
-      </div>
-</router-outlet>
+  <mat-toolbar color="primary" style="position:fixed; z-index: 100;">
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>Multi Language Chat Box</span>
+    <span class="example-spacer"></span>
+    <a href="https://github.com/OmarElsayd/Real-Time-Voice-to-Text" style="margin-left: auto;" target="_blank">
+      <button mat-icon-button class="github" style="position:relative; top: 10px; right: 10px; width: 45px; height: 45px;" aria-label="GitHub icon">
+        <mat-icon svgIcon="custom-icons:github" style="position: inherit; top: -10px; right: 10px; width: 40px; height: 40px;"></mat-icon>
+      </button>
+    </a>
 
+  </mat-toolbar>
+  <div class="spinner-container" *ngIf="apiService.showSpinner$ | async">
+    <mat-spinner></mat-spinner>
+  </div>
+</router-outlet>

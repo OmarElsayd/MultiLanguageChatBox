@@ -15,4 +15,4 @@ def translate_text_(source_language_code: str, text: str, target_language_code: 
         source_language_code=source_language_code
     )
 
-    return response.translations[0]
+    return response.translations[0].translated_text

@@ -10,3 +10,7 @@
     background: rgba(0, 0, 0, 0.5);
     z-index: 1000;
   }
+
+  :host ::ng-deep .github {
+    --mdc-icon-button-icon-size: 40px;
+}

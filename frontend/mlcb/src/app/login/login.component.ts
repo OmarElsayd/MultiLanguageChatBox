@@ -23,6 +23,7 @@ export class LoginComponent {
           if (response.status_code == 200){
             localStorage.setItem("Authorization", response.access_token)
             this.apiService.spinnerHide()
+            localStorage.setItem("user_name", this.username);
             this.router.navigate(['/home_page']);
           }
         },

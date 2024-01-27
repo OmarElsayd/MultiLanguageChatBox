@@ -20,6 +20,13 @@ import { NewSessionComponent } from './home/new-session/new-session.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatListModule } from '@angular/material/list';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DialogComponent } from './home/dialog/dialog.component';
+import { SginupComponent } from './sginup/sginup.component';
+import {MatGridListModule} from '@angular/material/grid-list';
+import { SpeechService } from './api_services/speech.service';
 
 
 
@@ -28,7 +35,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     LoginComponent,
     HomeComponent,
     SessionHistroyComponent,
-    NewSessionComponent
+    NewSessionComponent,
+    DialogComponent,
+    SginupComponent
   ],
   imports: [
     HttpClientModule,
@@ -46,9 +55,13 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatSlideToggleModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatListModule,
+    MatTabsModule,
+    MatDialogModule,
+    MatGridListModule
   ],
-  providers:[HttpClient],
+  providers:[HttpClient, SpeechService],
 })
 
 export class AppModule {
