@@ -2,9 +2,9 @@ import os
 
 import pytest
 
-from rtvt_services.db_engine.engine import create_db_engine
-from rtvt_services.db_engine.session import get_session
-from rtvt_services.db_models.base import Base
+from mlcb_services.db_engine.engine import create_db_engine
+from mlcb_services.db_engine.session import get_session
+from mlcb_services.db_models.base import Base
 
 PYTEST_ENV_DICT = {
     'DB_HOST': 'localhost',

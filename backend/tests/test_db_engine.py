@@ -2,9 +2,9 @@
 import os
 import pytest
 from sqlalchemy.engine import create_engine
-from rtvt_services.config.get_creds import DbCreds, SshCreds
-from rtvt_services.db_engine.engine import create_db_engine
-from rtvt_services.util.constant import DB_URL
+from mlcb_services.config.get_creds import DbCreds, SshCreds
+from mlcb_services.db_engine.engine import create_db_engine
+from mlcb_services.util.constant import DB_URL
 
 
 @pytest.mark.parametrize("test_creds_class", [DbCreds, SshCreds])
