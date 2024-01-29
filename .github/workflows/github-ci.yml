@@ -129,7 +129,7 @@ jobs:
     steps:
       - name: Deploy
         run: |
-          echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" | gcloud auth activate-service-account --key-file=-
+          echo ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} | gcloud auth activate-service-account ${{ secrets.GOOGLE_ACCOUNT }}@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com --key-file=-
           gcloud auth configure-docker
           docker pull ${{ secrets.DOCKER_USERNAME }}/mlcb:latest
           docker tag ${{ secrets.DOCKER_USERNAME }}/mlcb:${{ env.IMAGE_TAG }} gcr.io/${{ secrets.PROJECT_ID }}/${{ secrets.DOCKER_USERNAME }}/mlcb:latest
