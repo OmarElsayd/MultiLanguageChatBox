@@ -1,0 +1,73 @@
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+form {
+  width: 300px;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+}
+
+.chat-box-container {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  padding: 16px; 
+}
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.message {
+  margin-bottom: 10px;
+}
+
+.user-message {
+  background-color: #4caf50; 
+  color: white; 
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.spt-message {
+  background-color: #2196f3; /* Blue background for 'spt' messages */
+  color: white; /* White text color */
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.sender {
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+mat-form-field {
+  margin-bottom: 10px;
+}
+
+button {
+  margin-bottom: 10px;
+}
+  
+.incoming-message {
+  text-align: left;
+}
+
+.outgoing-message {
+  text-align: right;
+}
+
+.message .sender, .message .text {
+  max-width: 30ch;
+  display: inline-block;
+  word-wrap: break-word;
+}

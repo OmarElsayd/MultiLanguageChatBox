@@ -1,0 +1,58 @@
+<div *ngIf="sginUpForm" class="sginup-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Sign Up</mat-card-title>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <form (ngSubmit)="signUp()" #signUpForm="ngForm">
+                    
+          <mat-form-field>
+            <input matInput placeholder="First Name" name="firstname" [(ngModel)]="firstname" ngModel required>
+          </mat-form-field>
+                    
+          <mat-form-field>
+            <input matInput placeholder="Last Name" name="lastname" [(ngModel)]="lastname" ngModel required>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Username" name="username" [(ngModel)]="username" ngModel required>
+          </mat-form-field>
+  
+          <mat-form-field>
+            <input matInput type="email" placeholder="Email" name="email" [(ngModel)]="email" ngModel required>
+          </mat-form-field>
+  
+          <mat-form-field>
+            <input matInput type="password" placeholder="Password" name="password" [(ngModel)]="password" ngModel required>
+          </mat-form-field>
+  
+          <mat-form-field>
+            <input matInput type="password" placeholder="Confirm Password" name="confirmPassword" [(ngModel)]="confirmPassword" ngModel required>
+          </mat-form-field>
+  
+          <button mat-raised-button color="primary" type="submit" [disabled]="!signUpForm.valid">Sign Up</button>
+        </form>
+        <a href="/login">Already have an account? Login</a>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div *ngIf="emailConfirmForm" class="sginup-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Email Confirmation</mat-card-title>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <form (ngSubmit)="confirmEmail()" #emailConfirmForm="ngForm">
+
+          <mat-form-field>
+            <input matInput type="text" placeholder="Enter confirmation code" name="confirmCode" [(ngModel)]="confirmCode" ngModel required>
+          </mat-form-field>
+          
+          <button mat-raised-button color="primary" type="submit" [disabled]="!emailConfirmForm.valid">Confirm Email</button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+</div>

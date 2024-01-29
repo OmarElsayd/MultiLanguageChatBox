@@ -1,0 +1,32 @@
+.mat-elevation-z8-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+  top: 7%;
+  overflow-y: auto;
+}
+
+.mat-elevation-z8, mat-tab-group, mat-card {
+  width: 100%;
+}
+.mat-mdc-row:hover .mat-mdc-cell {
+  background: rgba(0, 0, 0, 0.2);
+}
+mat-card-header {
+  background-color: #f0f0f0;
+}
+
+mat-card-title, mat-card-subtitle {
+  color: #333;
+}
+
+mat-header-cell, mat-cell {
+  padding: 8px;
+  text-align: left;
+}
+
+.mat-paginator {
+  margin-top: 25px;
+}

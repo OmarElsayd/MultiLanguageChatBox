@@ -1,0 +1,38 @@
+{
+  "body": {
+    "user1": {
+      "user_first_name": {
+        "transcript_text": [
+          {
+            "text": {
+              "before": "example",
+              "after": "example"
+            },
+            "time": "time"
+          }
+        ],
+        "source_lang": "en-us"
+      }
+    },
+    "user2": {
+      "user_first_name": {
+        "transcript_text": [
+          {
+            "text": {
+              "before": "example",
+              "after": "example"
+            },
+            "time": "time"
+          }
+        ],
+        "source_lang": "ar-eg"
+      }
+    }
+  },
+  "info": {
+    "user1": "user_name",
+    "user2": "user_name",
+    "user1_lang": "lang",
+    "user2_lang": "lang"
+  }
+}

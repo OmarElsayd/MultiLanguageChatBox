@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
-from rtvt_services.util.constant import REQ_LIB_PATH
+from mlcb_services.util.constant import REQ_LIB_PATH
 
 with open(REQ_LIB_PATH, 'r') as file:
     lib_list = [line.rstrip() for line in file.readlines()]
 
 setup(
-    name='rtvt_services',
+    name='mlcb_services',
     version='0.0.1',
     author='Omar Elsayd',
     author_email='omar.elsayd@hotmail.com',

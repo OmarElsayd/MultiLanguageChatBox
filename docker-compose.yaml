@@ -1,10 +1,11 @@
 version: '3.8'
 
 services:
-  rtvt_backend:
+  mlcb_backend:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: backend/Dockerfile
+    image: ${DOCKER_USERNAME}/mlcb_backend:latest
     environment:
       - DB_HOST=${DB_HOST}
       - DB_PASS=${DB_PASS}
@@ -18,5 +19,35 @@ services:
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - JWT_REFRESH_SECRET_KEY=${JWT_REFRESH_SECRET_KEY}
       - SSH=${SSH}
+      - PROJECT_ID=${PROJECT_ID}
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+      - GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT}
+      - GOOGLE_ACCOUNT=${GOOGLE_ACCOUNT}
+      - SCHEMA=${SCHEMA}
+      - GOOGLE_APP_PASS=${GOOGLE_APP_PASS}
+      - SECRET_SALT=${SECRET_SALT}
+      - SSL_CERTIFICATE=${SSL_CERTIFICATE}
+      - SSL_KEY=${SSL_KEY}
+      - DOCKER_USERNAME=${DOCKER_USERNAME}
     ports:
       - "8000:8000"
+    restart: always
+
+  mlcb_frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME}/mlcb_frontend:latest
+    environment:
+      - SSL_CERTIFICATE=${SSL_CERTIFICATE}
+      - SSL_KEY=${SSL_KEY}
+      - DOCKER_USERNAME=${DOCKER_USERNAME}
+    ports:
+      - "80:80"
+    depends_on:
+      - mlcb_backend
+    restart: always
+
+networks:
+  default:
+    driver: bridge

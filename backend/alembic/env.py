@@ -3,11 +3,11 @@ from logging.config import fileConfig
 
 from alembic import context
 
-from rtvt_services.config.get_creds import DbCreds
-from rtvt_services.db_engine.engine import create_db_engine, ssh_db_engine
-from rtvt_services.db_models import base, models
-from rtvt_services.util.constant import DB_URL
-from rtvt_services.util.constant import DB_SCHEMA
+from mlcb_services.config.get_creds import DbCreds
+from mlcb_services.db_engine.engine import create_db_engine, ssh_db_engine
+from mlcb_services.db_models import base, models
+from mlcb_services.util.constant import DB_URL
+from mlcb_services.util.constant import DB_SCHEMA
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

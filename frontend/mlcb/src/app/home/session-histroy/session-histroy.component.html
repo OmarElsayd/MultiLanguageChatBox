@@ -1,0 +1,71 @@
+<div *ngIf="!selectedSession" class="mat-elevation-z8-container">
+  <!-- Session List Table -->
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let session">{{ session.id }}</td>
+      </ng-container>
+
+      <!-- Created At Column -->
+      <ng-container matColumnDef="created_at">
+        <th mat-header-cell *matHeaderCellDef>Created At</th>
+        <td mat-cell *matCellDef="let session">{{ session.created_at }}</td>
+      </ng-container>
+
+      <!-- End At Column -->
+      <ng-container matColumnDef="end_at">
+        <th mat-header-cell *matHeaderCellDef>End At</th>
+        <td mat-cell *matCellDef="let session">{{ session.end_at || 'N/A' }}</td>
+      </ng-container>
+
+      <!-- Participants Column -->
+      <ng-container matColumnDef="participants">
+        <th mat-header-cell *matHeaderCellDef>Participants</th>
+        <td mat-cell *matCellDef="let session">{{ session.participants.join(', ') }}</td>
+      </ng-container>
+
+      <!-- Session Code Column -->
+      <ng-container matColumnDef="session_code">
+        <th mat-header-cell *matHeaderCellDef>Session Code</th>
+        <td mat-cell *matCellDef="let session">{{ session.session_code }}</td>
+      </ng-container>
+
+      <!-- Transcript ID Column -->
+      <ng-container matColumnDef="transcript_id">
+        <th mat-header-cell *matHeaderCellDef>Transcript ID</th>
+        <td mat-cell *matCellDef="let session">{{ session.transcript_id }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row (dblclick)="getSession(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [length]="100" [pageSize]="5" [pageSizeOptions]="[5, 10, 20, 50]" (page)="onPageChange($event)"></mat-paginator>
+  </div>
+</div>
+
+<mat-tab-group *ngIf="selectedSession" style="position: relative; top: 7%;">
+  <mat-tab *ngFor="let user of [user1_, user2_]" label="{{ user }} Transcripts">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{ user }} Translation Details</mat-card-title>
+        <mat-card-subtitle>
+          Source Language: {{ user === user1_ ? user1Data['source_lang'] : user2Data['source_lang'] }}
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-table [dataSource]="user === user1_ ? dataSourceUser1 : dataSourceUser2">
+          <!-- Column definitions -->
+          <ng-container *ngFor="let column of transcriptDisplayedColumns" [matColumnDef]="column">
+            <mat-header-cell *matHeaderCellDef> {{ column | titlecase }} </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ element[column] }} </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="transcriptDisplayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: transcriptDisplayedColumns;"></mat-row>
+        </mat-table>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>
+

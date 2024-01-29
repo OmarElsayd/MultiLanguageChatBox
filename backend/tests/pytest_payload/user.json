@@ -1,0 +1,8 @@
+{
+  "password": "pytest_secretPassword",
+  "user_name": "testuser",
+  "last_name": "pytest_firstname",
+  "first_name": "pytest_lastname",
+  "email": "pytest@pytest",
+  "role": "User"
+}
