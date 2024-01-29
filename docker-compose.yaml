@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
-    image: ${DOCKER_USERNAME}/mlcb_backend:latest
+    image: ${DOCKER_USERNAME}/mlcb:backend
     environment:
       - DB_HOST=${DB_HOST}
       - DB_PASS=${DB_PASS}
@@ -37,7 +37,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    image: ${DOCKER_USERNAME}/mlcb_frontend:latest
+    image: ${DOCKER_USERNAME}/mlcb:frontend
     environment:
       - SSL_CERTIFICATE=${SSL_CERTIFICATE}
       - SSL_KEY=${SSL_KEY}
