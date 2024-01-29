@@ -13,7 +13,6 @@ from mlcb_services.db_engine.session import get_session
 from mlcb_services.db_models.models import MlcbUsers, MlcbSessions, Transcripts
 from mlcb_services.dependency.exception_handler import raise_http_exception
 from mlcb_services.dependency.role_checker import user_pass
-from mlcb_services.security_auth.jwt_auth import get_hashed_password
 from mlcb_services.util.constant import NUM_SESSION_CODE_CHAR, API_V1_BASE_ROOT, CHAT_INVITATION_TEMPLATE, \
     CHAT_INVITATION_SUBJECT
 from mlcb_services.util.payloads import SessionPayload
