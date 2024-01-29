@@ -108,14 +108,14 @@ export class ApiService {
     return this.http.get<any>(`${this.apiUrl}/session/${row.session_code}/history`, { headers })
   }
   
-  new_session(invitee: string, passCode: string, is_call: boolean){
+  new_session(invitee: string, is_call: boolean){
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + this.getToken(),
     });
     return this.http.put<any>(`${this.apiUrl}/session/new_session`, {
       "invitee": invitee,
-      "passcode": passCode,
+      // "passcode": passCode,
       "is_call": is_call
     },
     { headers })

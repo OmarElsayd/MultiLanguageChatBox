@@ -20,7 +20,7 @@ export class NewSessionComponent implements OnDestroy, OnInit{
   join_session_from_home: boolean = false;
   isSessionChatOn: boolean = false;
 
-  passCode: string = '';
+  // passCode: string = '';
   userName: string = '';
   isSessionCall: boolean = false;
   session_code: string = '';
@@ -90,7 +90,7 @@ export class NewSessionComponent implements OnDestroy, OnInit{
 
   newSessionSubmit() {
     this.apiService.spinnerShow();
-    this.apiService.new_session(this.userName, this.passCode, this.isSessionCall).subscribe(
+    this.apiService.new_session(this.userName, this.isSessionCall).subscribe(
       (responce) =>{
         if (responce.status_code === 200){
           this.session_code = responce.session_code;

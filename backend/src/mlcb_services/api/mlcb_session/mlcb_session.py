@@ -51,7 +51,7 @@ async def start_chat_session(
         new_session = MlcbSessions(
             user_id=user.id,
             participants=[user.user_name, session_payload.invitee],
-            session_passcode=get_hashed_password(session_payload.passcode),
+            # session_passcode=get_hashed_password(session_payload.passcode),
             is_call=session_payload.is_call,
             session_code=generate_session_id(),
             transcript_id=new_transcript.id

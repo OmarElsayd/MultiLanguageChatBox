@@ -65,5 +65,5 @@ class SessionPayload(BaseModel):
     invitee: user_name
     """
     invitee: str
-    passcode: str = None
+    # passcode: str = None
     is_call: bool = False

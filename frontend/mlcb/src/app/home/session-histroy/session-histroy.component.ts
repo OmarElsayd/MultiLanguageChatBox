@@ -38,8 +38,10 @@ export class SessionHistroyComponent implements OnInit, AfterViewInit, OnDestroy
   constructor(private apiService: ApiService, private notService: NoteService, private beforeUnloadService: BeforeUnloadService) {}
 
   ngOnInit() {
-    this.loadPage(1, 5);
+    this.apiService.spinnerShow();
+    this.loadPage(1, 5);  
     this.beforeUnloadService.enableBeforeUnload();
+    this.apiService.spinnerHide();
   }
 
   ngAfterViewInit() {
@@ -51,19 +53,16 @@ export class SessionHistroyComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   loadPage(page: number, pageSize: number) {
-    this.apiService.spinnerShow();
     this.apiService.session_history(page, pageSize).subscribe(response => {
     if (response.status_code === 200) {
       if (this.dataSource.paginator){
         this.dataSource.data = response.session_list;
         this.dataSource.paginator.length = response.total_count;
       }
-      this.apiService.spinnerHide();
       this.notService.openSnackBar("Sessions Histroy");
       return
     }
     });
-    this.apiService.spinnerHide()
     this.notService.openSnackBar("You have no sessions histroy");
   }
 

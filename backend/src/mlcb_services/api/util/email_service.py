@@ -10,7 +10,7 @@ logger = logging.getLogger("EMAIL SERVICE LOGGING")
 def send_email(to_email: str, template: str, **kwargs):
     msg = MIMEText(template.format(**kwargs))
     msg['Subject'] = kwargs['subject']
-    msg['From'] = os.getenv("GOOGLE_ACCOUNT")
+    msg['From'] = os.getenv("EMAIL_SERVICE_ACCOUNT")
     msg['To'] = to_email
 
     try:

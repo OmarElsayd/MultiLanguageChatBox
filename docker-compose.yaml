@@ -4,7 +4,7 @@ services:
   mlcb_backend:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: backend/Dockerfile
     environment:
       - DB_HOST=${DB_HOST}
       - DB_PASS=${DB_PASS}
@@ -23,5 +23,30 @@ services:
       - GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT}
       - GOOGLE_ACCOUNT=${GOOGLE_ACCOUNT}
       - SCHEMA=${SCHEMA}
+      - GOOGLE_APP_PASS=${GOOGLE_APP_PASS}
+      - SECRET_SALT=${SECRET_SALT}
+      - SSL_CERTIFICATE=${SSL_CERTIFICATE}
+      - SSL_KEY=${SSL_KEY}
     ports:
       - "8000:8000"
+
+    restart: always
+
+  mlcb_frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      - SSL_CERTIFICATE=${SSL_CERTIFICATE}
+      - SSL_KEY=${SSL_KEY}
+    ports:
+      - "80:80"
+      - "443:443"
+
+    depends_on:
+      - mlcb_backend
+    restart: always
+
+networks:
+  default:
+    driver: bridge
