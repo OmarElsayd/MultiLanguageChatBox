@@ -130,16 +130,21 @@ jobs:
       BACKEND_IMAGE: ${{ secrets.DOCKER_USERNAME }}/mlcb:backend
     if: github.ref == 'refs/heads/master'
     steps:
-      - name: Install Google Cloud SDK
-        run: |
-          curl https://sdk.cloud.google.com | bash
-          echo "$HOME/google-cloud-sdk/bin" >> $GITHUB_PATH
+      - uses: actions/checkout@v4
+      
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+#      - name: Install Google Cloud SDK
+#        run: |
+#          curl https://sdk.cloud.google.com | bash
+#          echo "$HOME/google-cloud-sdk/bin" >> $GITHUB_PATH
 
-      - name: Setup GCloud
-        run: |
-          echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > gcloud-service-key.json
-          gcloud auth activate-service-account --key-file=gcloud-service-key.json
-          gcloud auth configure-docker
+#      - name: Setup GCloud
+#        run: |
+#          echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > gcloud-service-key.json
+#          gcloud auth activate-service-account --key-file=gcloud-service-key.json
+#          gcloud auth configure-docker
 
       - name: Deploy Frontend
         run: |
