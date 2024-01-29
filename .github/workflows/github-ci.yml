@@ -130,6 +130,11 @@ jobs:
       BACKEND_IMAGE: ${{ secrets.DOCKER_USERNAME }}/mlcb:backend
     if: github.ref == 'refs/heads/master'
     steps:
+      - name: Install Google Cloud SDK
+        run: |
+          curl https://sdk.cloud.google.com | bash
+          echo "$HOME/google-cloud-sdk/bin" >> $GITHUB_PATH
+
       - name: Setup GCloud
         run: |
           echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" | gcloud auth activate-service-account ${{ secrets.GOOGLE_ACCOUNT }}@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com --key-file=-
