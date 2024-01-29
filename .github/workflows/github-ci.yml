@@ -66,23 +66,21 @@ jobs:
       run: |
         python -m pip install --upgrade pip
 
-    - name: Set up Docker Compose
-      run: docker-compose -f docker-compose.yaml up -d
-
-    - name: Build Docker image
-      run: |
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/mlcb .
-        docker tag ${{ secrets.DOCKER_USERNAME }}/mlcb:latest ${{ secrets.DOCKER_USERNAME }}/mlcb:${{ env.IMAGE_TAG }} 
+    - name: Build and Tag Docker Image with Docker Compose
+      run: | 
+        docker-compose -f docker-compose.yaml build
+        docker tag ${{ secrets.DOCKER_USERNAME }}/mlcb:latest ${{ secrets.DOCKER_USERNAME }}/mlcb:${{ env.IMAGE_TAG }}
 
     - name: Login to Docker Hub
       if: github.event_name == 'push'
       run: |
-        docker login -u ${{ secrets.DOCKER_USERNAME }}  -p ${{ secrets.DOCKER_PASSWORD }}
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-    - name: Push Docker image
+    - name: Push Docker Image
       if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop')
       run: |
         docker push ${{ secrets.DOCKER_USERNAME }}/mlcb:${{ env.IMAGE_TAG }}
+
 
 
   unit-testing:
