@@ -127,6 +127,11 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
+      - name: Install Google Cloud CLI
+        run: |
+          echo "Installing Google Cloud CLI..."
+          curl -sSL https://sdk.cloud.google.com | bash
+          echo "$HOME/google-cloud-sdk/bin" >> $GITHUB_PATH
       - name: Deploy
         run: |
           echo ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} | gcloud auth activate-service-account ${{ secrets.GOOGLE_ACCOUNT }}@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com --key-file=-
