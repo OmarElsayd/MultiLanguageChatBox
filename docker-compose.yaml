@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
+    image: ${DOCKER_USERNAME}/mlcb_backend:latest
     environment:
       - DB_HOST=${DB_HOST}
       - DB_PASS=${DB_PASS}
@@ -27,22 +28,22 @@ services:
       - SECRET_SALT=${SECRET_SALT}
       - SSL_CERTIFICATE=${SSL_CERTIFICATE}
       - SSL_KEY=${SSL_KEY}
+      - DOCKER_USERNAME=${DOCKER_USERNAME}
     ports:
       - "8000:8000"
-
     restart: always
 
   mlcb_frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME}/mlcb_frontend:latest
     environment:
       - SSL_CERTIFICATE=${SSL_CERTIFICATE}
       - SSL_KEY=${SSL_KEY}
+      - DOCKER_USERNAME=${DOCKER_USERNAME}
     ports:
       - "80:80"
-      - "443:443"
-
     depends_on:
       - mlcb_backend
     restart: always
