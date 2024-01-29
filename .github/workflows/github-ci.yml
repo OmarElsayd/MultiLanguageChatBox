@@ -137,19 +137,22 @@ jobs:
 
       - name: Setup GCloud
         run: |
-          echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" | gcloud auth activate-service-account ${{ secrets.GOOGLE_ACCOUNT }}@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com --key-file=-
+          echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" | base64 --decode > gcloud-service-key.json
+          gcloud auth activate-service-account --key-file=gcloud-service-key.json
           gcloud auth configure-docker
 
       - name: Deploy Frontend
         run: |
-          gcloud deploy releases create frontend-release-${{ env.IMAGE_TAG }} \
-            --delivery-pipeline=${{ secrets.FRONTEND_DEPLOY_KEY }} \
+          gcloud run deploy multilanguagechatbox \
+            --image=${{ env.FRONTEND_IMAGE }} \
             --region=us-central1 \
-            --images=frontend=${{ env.FRONTEND_IMAGE }}
-
+            --allow-unauthenticated \
+            --platform=managed
+      
       - name: Deploy Backend
         run: |
-          gcloud deploy releases create backend-release-${{ env.IMAGE_TAG }} \
-            --delivery-pipeline=${{ secrets.BACKEND_DEPLOY_KEY }} \
+          gcloud run deploy multilanguagechatboxbackend \
+            --image=${{ env.BACKEND_IMAGE }} \
             --region=us-central1 \
-            --images=backend=${{ env.BACKEND_IMAGE }}
+            --allow-unauthenticated \
+            --platform=managed
