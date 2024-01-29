@@ -137,7 +137,7 @@ jobs:
 
       - name: Setup GCloud
         run: |
-          echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" | base64 --decode > gcloud-service-key.json
+          echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > gcloud-service-key.json
           gcloud auth activate-service-account --key-file=gcloud-service-key.json
           gcloud auth configure-docker
 
@@ -148,7 +148,7 @@ jobs:
             --region=us-central1 \
             --allow-unauthenticated \
             --platform=managed
-      
+
       - name: Deploy Backend
         run: |
           gcloud run deploy multilanguagechatboxbackend \
