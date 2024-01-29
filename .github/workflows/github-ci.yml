@@ -119,7 +119,6 @@ jobs:
 
 #      - name: Tear down Docker Compose
 #        run: docker-compose -f docker-compose.yaml down
-
   deployment:
     needs: docker-build
     runs-on: ubuntu-latest
@@ -127,27 +126,25 @@ jobs:
       PROJECT_ID: ${{ secrets.PROJECT_ID }}
       GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
       GOOGLE_ACCOUNT: ${{ secrets.GOOGLE_ACCOUNT }}
-      FRONTEND_DEPLOY_KEY: ${{ secrets.FRONTEND_DEPLOY_KEY }}
-      BACKEND_DEPLOY_KEY: ${{ secrets.BACKEND_DEPLOY_KEY }}
+      FRONTEND_IMAGE: ${{ secrets.DOCKER_USERNAME }}/mlcb:frontend
+      BACKEND_IMAGE: ${{ secrets.DOCKER_USERNAME }}/mlcb:backend
     if: github.ref == 'refs/heads/master'
     steps:
       - name: Setup GCloud
         run: |
-          echo ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} | gcloud auth activate-service-account ${{ secrets.GOOGLE_ACCOUNT }}@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com --key-file=-
+          echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" | gcloud auth activate-service-account ${{ secrets.GOOGLE_ACCOUNT }}@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com --key-file=-
           gcloud auth configure-docker
 
       - name: Deploy Frontend
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/mlcb:frontend
-          docker tag ${{ secrets.DOCKER_USERNAME }}/mlcb:frontend gcr.io/${{ secrets.PROJECT_ID }}/${{ secrets.DOCKER_USERNAME }}/mlcb:frontend:${{ env.IMAGE_TAG }}
-          docker push gcr.io/${{ secrets.PROJECT_ID }}/${{ secrets.DOCKER_USERNAME }}/mlcb:frontend:${{ env.IMAGE_TAG }}
-          gcloud run deploy ${{ secrets.FRONTEND_SERVICE_NAME }} --image=gcr.io/${{ secrets.PROJECT_ID }}/${{ secrets.DOCKER_USERNAME }}/mlcb:frontend:${{ env.IMAGE_TAG }} \
-            --port=3000 --region=us-central1 --allow-unauthenticated --platform=managed
+          gcloud deploy releases create frontend-release-${{ env.IMAGE_TAG }} \
+            --delivery-pipeline=${{ secrets.FRONTEND_DEPLOY_KEY }} \
+            --region=us-central1 \
+            --images=frontend=${{ env.FRONTEND_IMAGE }}
 
       - name: Deploy Backend
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/mlcb:backend
-          docker tag ${{ secrets.DOCKER_USERNAME }}/mlcb:backend gcr.io/${{ secrets.PROJECT_ID }}/${{ secrets.DOCKER_USERNAME }}/mlcb:backend:${{ env.IMAGE_TAG }}
-          docker push gcr.io/${{ secrets.PROJECT_ID }}/${{ secrets.DOCKER_USERNAME }}/mlcb:backend:${{ env.IMAGE_TAG }}
-          gcloud run deploy ${{ secrets.BACKEND_SERVICE_NAME }} --image=gcr.io/${{ secrets.PROJECT_ID }}/${{ secrets.DOCKER_USERNAME }}/mlcb:backend:${{ env.IMAGE_TAG }} \
-            --port=3000 --region=us-central1 --allow-unauthenticated --platform=managed
+          gcloud deploy releases create backend-release-${{ env.IMAGE_TAG }} \
+            --delivery-pipeline=${{ secrets.BACKEND_DEPLOY_KEY }} \
+            --region=us-central1 \
+            --images=backend=${{ env.BACKEND_IMAGE }}
