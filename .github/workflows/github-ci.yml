@@ -168,19 +168,15 @@ jobs:
             --region=us-central1 \
             --allow-unauthenticated \
             --platform=managed
-      
+
       - name: Deploy Backend
         run: |
-          # Pull the Docker image from Docker Hub
           docker pull ${{ env.BACKEND_IMAGE }}
       
-          # Tag the image for Google Container Registry
           docker tag ${{ env.BACKEND_IMAGE }} gcr.io/${{ env.PROJECT_ID }}/mlcb-backend:latest
       
-          # Push the image to Google Container Registry
-          docker push gcr.io/${{ env.PROJECT_ID }}/mlcb-backend:latest
       
-          # Deploy the image to Google Cloud Run
+
           gcloud run deploy multilanguagechatboxbackend \
             --image=gcr.io/${{ env.PROJECT_ID }}/mlcb-backend:latest \
             --region=us-central1 \
