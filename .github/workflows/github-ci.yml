@@ -4,8 +4,6 @@ on: [push]
 
 env:
   IMAGE_TAG: $(date +%Y%m%d%H%M%S)
-  PROJECT_ID: ${{ secrets.PROJECT_ID }}
-  GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
 
 jobs:
   code-linting:
@@ -49,13 +47,15 @@ jobs:
       JWT_REFRESH_SECRET_KEY: ${{ secrets.JWT_REFRESH_SECRET_KEY }}
       SSH: ${{ secrets.SSH }}
       GOOGLE_CLOUD_PROJECT: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
-      GOOGLE_ACCOUNT: ${{ secrets.GOOGLE_ACCOUNT }}
       SCHEMA: ${{ secrets.SCHEMA }}
       SECRET_SALT: ${{ secrets.cc19777d84f59635 }}
       SSL_CERTIFICATE: ${{ secrets.SSL_CERTIFICATE }}
       SSL_KEY: ${{ secrets.SSL_KEY }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      PROJECT_ID: ${{ secrets.PROJECT_ID }}
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+      GOOGLE_ACCOUNT: ${{ secrets.GOOGLE_ACCOUNT }}
 
     steps:
     - uses: actions/checkout@v3
@@ -81,8 +81,6 @@ jobs:
       if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop')
       run: |
         docker-compose -f docker-compose.yaml push
-
-
 
 
   unit-testing:
@@ -125,20 +123,31 @@ jobs:
   deployment:
     needs: docker-build
     runs-on: ubuntu-latest
+    env:
+      PROJECT_ID: ${{ secrets.PROJECT_ID }}
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+      GOOGLE_ACCOUNT: ${{ secrets.GOOGLE_ACCOUNT }}
+      FRONTEND_DEPLOY_KEY: ${{ secrets.FRONTEND_DEPLOY_KEY }}
+      BACKEND_DEPLOY_KEY: ${{ secrets.BACKEND_DEPLOY_KEY }}
     if: github.ref == 'refs/heads/master'
     steps:
-      - name: Install Google Cloud CLI
-        run: |
-          echo "Installing Google Cloud CLI..."
-          curl -sSL https://sdk.cloud.google.com | bash
-          echo "$HOME/google-cloud-sdk/bin" >> $GITHUB_PATH
-      - name: Deploy
+      - name: Setup GCloud
         run: |
           echo ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} | gcloud auth activate-service-account ${{ secrets.GOOGLE_ACCOUNT }}@${{ secrets.PROJECT_ID }}.iam.gserviceaccount.com --key-file=-
           gcloud auth configure-docker
-          docker pull ${{ secrets.DOCKER_USERNAME }}/mlcb:latest
-          docker tag ${{ secrets.DOCKER_USERNAME }}/mlcb:${{ env.IMAGE_TAG }} gcr.io/${{ secrets.PROJECT_ID }}/${{ secrets.DOCKER_USERNAME }}/mlcb:latest
-          docker push gcr.io/${{ secrets.PROJECT_ID }}/${{ secrets.DOCKER_USERNAME }}/mlcb:$latest
-          gcloud run deploy --image=gcr.io/${{ secrets.PROJECT_ID }}/${{ secrets.DOCKER_USERNAME }}/mlcb:latest\
-            --port=3000 --region=us-central1 --allow-unauthenticated --platform=managed \
-            --command=gotenberg gotenberg
+
+      - name: Deploy Frontend
+        run: |
+          docker pull ${{ secrets.DOCKER_USERNAME }}/mlcb:frontend
+          docker tag ${{ secrets.DOCKER_USERNAME }}/mlcb:frontend gcr.io/${{ secrets.PROJECT_ID }}/${{ secrets.DOCKER_USERNAME }}/mlcb:frontend:${{ env.IMAGE_TAG }}
+          docker push gcr.io/${{ secrets.PROJECT_ID }}/${{ secrets.DOCKER_USERNAME }}/mlcb:frontend:${{ env.IMAGE_TAG }}
+          gcloud run deploy ${{ secrets.FRONTEND_SERVICE_NAME }} --image=gcr.io/${{ secrets.PROJECT_ID }}/${{ secrets.DOCKER_USERNAME }}/mlcb:frontend:${{ env.IMAGE_TAG }} \
+            --port=3000 --region=us-central1 --allow-unauthenticated --platform=managed
+
+      - name: Deploy Backend
+        run: |
+          docker pull ${{ secrets.DOCKER_USERNAME }}/mlcb:backend
+          docker tag ${{ secrets.DOCKER_USERNAME }}/mlcb:backend gcr.io/${{ secrets.PROJECT_ID }}/${{ secrets.DOCKER_USERNAME }}/mlcb:backend:${{ env.IMAGE_TAG }}
+          docker push gcr.io/${{ secrets.PROJECT_ID }}/${{ secrets.DOCKER_USERNAME }}/mlcb:backend:${{ env.IMAGE_TAG }}
+          gcloud run deploy ${{ secrets.BACKEND_SERVICE_NAME }} --image=gcr.io/${{ secrets.PROJECT_ID }}/${{ secrets.DOCKER_USERNAME }}/mlcb:backend:${{ env.IMAGE_TAG }} \
+            --port=3000 --region=us-central1 --allow-unauthenticated --platform=managed
