@@ -150,7 +150,7 @@ jobs:
           # Tag the image for Google Container Registry
           docker tag ${{ env.FRONTEND_IMAGE }} gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest
       
-          docker push gcr.io/projects/${{ env.PROJECT_ID }}/mlcb-frontend:latest
+          docker push gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest
           
           gcloud run deploy multilanguagechatbox \
             --image=gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest \
