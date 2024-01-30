@@ -28,6 +28,6 @@ RUN pip install --no-cache-dir -e 'backend/src'
 EXPOSE 3000
 
 # Use an entrypoint script to dynamically use the PORT environment variable
-COPY entrypoint.sh /usr/src/app
+COPY backend/entrypoint.sh /usr/src/app
 RUN chmod +x /usr/src/app/entrypoint.sh
 ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
