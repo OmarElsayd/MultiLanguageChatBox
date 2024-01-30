@@ -141,23 +141,26 @@ jobs:
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-      - name: Deploy Frontend
+      - name: Pull Docker Image from Docker Hub
         run: |
-          # Pull the Docker image from Docker Hub
           docker pull ${{ env.FRONTEND_IMAGE }}
       
-          # Tag the image for Google Container Registry
+      - name: Tag Docker Image for Google Container Registry
+        run: |
           docker tag ${{ env.FRONTEND_IMAGE }} gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest
       
-          # Push the image to Google Container Registry
+      - name: Push Docker Image to Google Container Registry
+        run: |
           docker push gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest
       
-          # Deploy the image to Google Cloud Run
+      - name: Deploy Docker Image to Google Cloud Run
+        run: |
           gcloud run deploy multilanguagechatbox \
             --image=gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest \
             --region=us-central1 \
             --allow-unauthenticated \
             --platform=managed
+
 
       - name: Deploy Backend
         run: |
