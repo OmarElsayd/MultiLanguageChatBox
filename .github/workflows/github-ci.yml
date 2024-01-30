@@ -157,8 +157,10 @@ jobs:
           docker pull ${{ env.FRONTEND_IMAGE }}
       
           # Tag the image for Google Container Registry
-          docker tag ${{ env.FRONTEND_IMAGE }} gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest
+          docker tag ${{ env.FRONTEND_IMAGE }} gcr.io/projects/${{ env.PROJECT_ID }}/mlcb-frontend:latest
       
+          # Push the image to Google Container Registry
+          docker push gcr.io/projects/${{ env.PROJECT_ID }}/mlcb-frontend:latest
       
           # Deploy the image to Google Cloud Run
           gcloud run deploy multilanguagechatbox \
@@ -169,12 +171,16 @@ jobs:
 
       - name: Deploy Backend
         run: |
+          # Pull the Docker image from Docker Hub
           docker pull ${{ env.BACKEND_IMAGE }}
       
+          # Tag the image for Google Container Registry
           docker tag ${{ env.BACKEND_IMAGE }} gcr.io/${{ env.PROJECT_ID }}/mlcb-backend:latest
       
+          # Push the image to Google Container Registry
+          docker push gcr.io/${{ env.PROJECT_ID }}/mlcb-backend:latest
       
-
+          # Deploy the image to Google Cloud Run
           gcloud run deploy multilanguagechatboxbackend \
             --image=gcr.io/${{ env.PROJECT_ID }}/mlcb-backend:latest \
             --region=us-central1 \
