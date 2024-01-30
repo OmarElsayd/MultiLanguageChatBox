@@ -154,9 +154,9 @@ jobs:
         run: |
           docker tag ${{ env.FRONTEND_IMAGE }} gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest
 
-      - name: Push Docker Image to Google Container Registry
-        run: |
-          docker push gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest
+      # - name: Push Docker Image to Google Container Registry
+      #   run: |
+      #     docker push gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest
 
       - name: Deploy Docker Image to Google Cloud Run
         run: |
