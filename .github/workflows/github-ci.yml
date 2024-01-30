@@ -168,7 +168,8 @@ jobs:
             --image=gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest \
             --region=us-central1 \
             --allow-unauthenticated \
-            --platform=managed
+            --platform=managed \
+            --port=8080
 
 
       - name: Deploy Backend
