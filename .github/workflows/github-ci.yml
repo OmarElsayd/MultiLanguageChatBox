@@ -160,11 +160,11 @@ jobs:
           docker tag ${{ env.FRONTEND_IMAGE }} gcr.io/projects/${{ env.PROJECT_ID }}/mlcb-frontend:latest
       
           # Push the image to Google Container Registry
-          docker push gcr.io/projects/${{ env.PROJECT_ID }}/mlcb-frontend:latest
+          # docker push gcr.io/projects/${{ env.PROJECT_ID }}/mlcb-frontend:latest
       
           # Deploy the image to Google Cloud Run
           gcloud run deploy multilanguagechatbox \
-            --image=gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest \
+            --image=gcr.io/projects/${{ env.PROJECT_ID }}/mlcb-frontend:latest \
             --region=us-central1 \
             --allow-unauthenticated \
             --platform=managed
