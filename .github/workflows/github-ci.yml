@@ -120,7 +120,7 @@ jobs:
 #      - name: Tear down Docker Compose
 #        run: docker-compose -f docker-compose.yaml down
   deployment:
-    needs: docker-build
+    # needs: docker-build
     runs-on: ubuntu-latest
     env:
       PROJECT_ID: ${{ secrets.PROJECT_ID }}
