@@ -69,7 +69,7 @@ jobs:
 #        python -m pip install --upgrade pip
 #
 #    - name: Build Docker Images with Docker Compose
-#      run: | 
+#      run: |
 #        docker-compose -f docker-compose.yaml build
 #
 #    - name: Login to Docker Hub
@@ -120,7 +120,6 @@ jobs:
 #      - name: Tear down Docker Compose
 #        run: docker-compose -f docker-compose.yaml down
   deployment:
-    # needs: docker-build
     runs-on: ubuntu-latest
     env:
       PROJECT_ID: ${{ secrets.PROJECT_ID }}
@@ -140,7 +139,6 @@ jobs:
       - name: Login to Docker Hub
         if: github.event_name == 'push'
         run: |
-          cat gha-creds-7df70a274df3e8c9.json
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
       - name: Deploy Frontend
@@ -151,8 +149,10 @@ jobs:
           # Tag the image for Google Container Registry
           docker tag ${{ env.FRONTEND_IMAGE }} gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest
       
+          # Push the image to Google Container Registry
           docker push gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest
-          
+      
+          # Deploy the image to Google Cloud Run
           gcloud run deploy multilanguagechatbox \
             --image=gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest \
             --region=us-central1 \
@@ -175,4 +175,5 @@ jobs:
             --image=gcr.io/${{ env.PROJECT_ID }}/mlcb-backend:latest \
             --region=us-central1 \
             --allow-unauthenticated \
-            --platform=managed
+            --platform=managed \
+            --port=3000
