@@ -24,8 +24,8 @@ RUN pip install --no-cache-dir -e 'backend/src'
 # COPY frontend/cert.pem /etc/ssl/cert.pem
 # COPY frontend/key.pem /etc/ssl/key.pem
 
-# Expose port 8000 (Not used by Cloud Run but good for documentation)
-EXPOSE 3000
+
+EXPOSE 8000
 
 # Use an entrypoint script to dynamically use the PORT environment variable
 COPY backend/entrypoint.sh /usr/src/app
