@@ -30,7 +30,7 @@ services:
       - SSL_KEY=${SSL_KEY}
       - DOCKER_USERNAME=${DOCKER_USERNAME}
     ports:
-      - "3000:3000"
+      - "8000:8000"
     restart: always
 
   mlcb_frontend:
