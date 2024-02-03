@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
   API_ROUTE: 'mlcb/api/v1',
-  BASE_DOMAIN_ROUTE: '192.168.1.71:8000'
+  BASE_DOMAIN_ROUTE: 'multilanguagechatboxbackend-qqahzd6gxa-uc.a.run.app:8000'
 };
