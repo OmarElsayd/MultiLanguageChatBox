@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
-    image: ${DOCKER_USERNAME}/mlcb_backend:backend
+    image: ${DOCKER_USERNAME}/mlcb:backend
     environment:
       - DB_HOST=${DB_HOST}
       - DB_PASS=${DB_PASS}
