@@ -26,61 +26,61 @@ jobs:
 #           pylint $(git ls-files '*.py')
 
 
-#   docker-build:
-#     runs-on: ubuntu-latest
-#     needs: code-linting
-#     strategy:
-#       matrix:
-#         python-version: ["3.11"]
+  docker-build:
+    runs-on: ubuntu-latest
+    # needs: code-linting
+    strategy:
+      matrix:
+        python-version: ["3.11"]
 
-#     env:
-#       DB_HOST: ${{ secrets.DB_HOST }}
-#       DB_PASS: ${{ secrets.DB_PASS }}
-#       DB_PORT: ${{ secrets.DB_PORT }}
-#       DB_USER: ${{ secrets.DB_USER }}
-#       DB_NAME: ${{ secrets.DB_NAME }}
-#       ssh_username: ${{ secrets.ssh_username }}
-#       ssh_password: ${{ secrets.ssh_password }}
-#       ssh_hostname: ${{ secrets.ssh_hostname }}
-#       ssh_port: ${{ secrets.ssh_port }}
-#       JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-#       JWT_REFRESH_SECRET_KEY: ${{ secrets.JWT_REFRESH_SECRET_KEY }}
-#       SSH: ${{ secrets.SSH }}
-#       GOOGLE_CLOUD_PROJECT: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
-#       SCHEMA: ${{ secrets.SCHEMA }}
-#       SECRET_SALT: ${{ secrets.SECRET_SALT }}
-#       SSL_CERTIFICATE: ${{ secrets.SSL_CERTIFICATE }}
-#       SSL_KEY: ${{ secrets.SSL_KEY }}
-#       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-#       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-#       PROJECT_ID: ${{ secrets.PROJECT_ID }}
-#       GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-#       GOOGLE_ACCOUNT: ${{ secrets.GOOGLE_ACCOUNT }}
+    env:
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PASS: ${{ secrets.DB_PASS }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      ssh_username: ${{ secrets.ssh_username }}
+      ssh_password: ${{ secrets.ssh_password }}
+      ssh_hostname: ${{ secrets.ssh_hostname }}
+      ssh_port: ${{ secrets.ssh_port }}
+      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+      JWT_REFRESH_SECRET_KEY: ${{ secrets.JWT_REFRESH_SECRET_KEY }}
+      SSH: ${{ secrets.SSH }}
+      GOOGLE_CLOUD_PROJECT: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
+      SCHEMA: ${{ secrets.SCHEMA }}
+      SECRET_SALT: ${{ secrets.SECRET_SALT }}
+      SSL_CERTIFICATE: ${{ secrets.SSL_CERTIFICATE }}
+      SSL_KEY: ${{ secrets.SSL_KEY }}
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      PROJECT_ID: ${{ secrets.PROJECT_ID }}
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+      GOOGLE_ACCOUNT: ${{ secrets.GOOGLE_ACCOUNT }}
 
-#     steps:
-#     - uses: actions/checkout@v3
-#     - name: Set up Python ${{ matrix.python-version }}
-#       uses: actions/setup-python@v3
-#       with:
-#         python-version: ${{ matrix.python-version }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
 
-#     - name: Install dependencies
-#       run: |
-#         python -m pip install --upgrade pip
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
 
-#     - name: Build Docker Images with Docker Compose
-#       run: |
-#         docker-compose -f docker-compose.yaml build
+    - name: Build Docker Images with Docker Compose
+      run: |
+        docker-compose -f docker-compose.yaml build
 
-#     - name: Login to Docker Hub
-#       if: github.event_name == 'push'
-#       run: |
-#         echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+    - name: Login to Docker Hub
+      if: github.event_name == 'push'
+      run: |
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-#     - name: Push Docker Images
-#       if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop')
-#       run: |
-#         docker-compose -f docker-compose.yaml push
+    - name: Push Docker Images
+      if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop')
+      run: |
+        docker-compose -f docker-compose.yaml push
 
 
 #   unit-testing:
@@ -120,7 +120,7 @@ jobs:
 # #      - name: Tear down Docker Compose
 # #        run: docker-compose -f docker-compose.yaml down
   deployment:
-    # needs: docker-build
+    needs: docker-build
     runs-on: ubuntu-latest
     env:
       PROJECT_ID: ${{ secrets.PROJECT_ID }}
