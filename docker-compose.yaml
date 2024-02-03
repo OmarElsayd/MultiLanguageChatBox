@@ -19,6 +19,7 @@ services:
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - JWT_REFRESH_SECRET_KEY=${JWT_REFRESH_SECRET_KEY}
       - SSH=${SSH}
+      - GCP_SA_KEY=${GCP_SA_KEY}
       - PROJECT_ID=${PROJECT_ID}
       - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
       - GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT}
@@ -26,11 +27,9 @@ services:
       - SCHEMA=${SCHEMA}
       - GOOGLE_APP_PASS=${GOOGLE_APP_PASS}
       - SECRET_SALT=${SECRET_SALT}
-      - SSL_CERTIFICATE=${SSL_CERTIFICATE}
-      - SSL_KEY=${SSL_KEY}
       - DOCKER_USERNAME=${DOCKER_USERNAME}
     ports:
-      - "8000:8000"
+      - "3000:3000"
     restart: always
 
   mlcb_frontend:
@@ -39,11 +38,10 @@ services:
       dockerfile: Dockerfile
     image: ${DOCKER_USERNAME}/mlcb:frontend
     environment:
-      - SSL_CERTIFICATE=${SSL_CERTIFICATE}
-      - SSL_KEY=${SSL_KEY}
       - DOCKER_USERNAME=${DOCKER_USERNAME}
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - mlcb_backend
     restart: always
