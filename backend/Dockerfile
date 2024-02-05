@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y curl \
     && /usr/local/gcloud/google-cloud-sdk/install.sh \
     && rm /tmp/google-cloud-sdk.tar.gz
 
-ENV PORT 8000
+ENV PORT 5678
 ENV HOST 0.0.0.0
 ENV PATH $PATH:/usr/local/gcloud/google-cloud-sdk/bin
 
@@ -27,7 +27,7 @@ RUN pip install --no-cache-dir -e 'backend/src'
 # COPY frontend/key.pem /etc/ssl/key.pem
 
 
-EXPOSE 8000
+EXPOSE 5678
 
 # Use an entrypoint script to dynamically use the PORT environment variable
 COPY backend/entrypoint.sh /usr/src/app
