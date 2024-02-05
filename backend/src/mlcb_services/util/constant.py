@@ -4,7 +4,7 @@ API_V1_BASE_ROOT = '/mlcb/api/v1'
 DB_ENV_LIST = ["DB_HOST", "DB_PASS", "DB_PORT", "DB_NAME", "DB_USER"]
 SSH_ENV_LIST = ['ssh_password', 'ssh_username', 'ssh_hostname', 'ssh_port']
 
-SSH_DB_URL = 'postgresql://{DB_USER}:{DB_PASS}@{SHH_TUNNEL}/{DB_NAME}'
+SSH_DB_URL = 'postgresql://{DB_USER}:{DB_PASS}@127.0.0.1:{SHH_TUNNEL}/{DB_NAME}'
 DB_URL = 'postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 
 REQ_LIB_PATH = 'requirements.txt'
