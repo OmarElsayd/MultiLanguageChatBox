@@ -151,45 +151,45 @@ jobs:
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-      # - name: Pull Docker Image from Docker Hub
-      #   run: |
-      #     docker pull ${{ env.FRONTEND_IMAGE }}
-
-      # - name: Tag Docker Image for Google Container Registry
-      #   run: |
-      #     docker tag ${{ env.FRONTEND_IMAGE }} gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest
-
-      # - name: Push Docker Image to Google Container Registry
-      #   run: |
-      #     docker push gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest
-
-      # - name: Deploy Docker Image to Google Cloud Run
-      #   run: |
-      #     gcloud run deploy multilanguagechatbox \
-      #       --image=gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest \
-      #       --region=us-central1 \
-      #       --allow-unauthenticated \
-      #       --port=80 \
-      #       --verbosity=debug \
-      #       --platform=managed
-
-      - name: Deploy Backend
+      - name: Pull Docker Image from Docker Hub
         run: |
-          # Pull the Docker image from Docker Hub
-          docker pull ${{ env.BACKEND_IMAGE }}
+          docker pull ${{ env.FRONTEND_IMAGE }}
+
+      - name: Tag Docker Image for Google Container Registry
+        run: |
+          docker tag ${{ env.FRONTEND_IMAGE }} gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest
+
+      - name: Push Docker Image to Google Container Registry
+        run: |
+          docker push gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest
+
+      - name: Deploy Docker Image to Google Cloud Run
+        run: |
+          gcloud run deploy multilanguagechatbox \
+            --image=gcr.io/${{ env.PROJECT_ID }}/mlcb-frontend:latest \
+            --region=us-central1 \
+            --allow-unauthenticated \
+            --port=80 \
+            --verbosity=debug \
+            --platform=managed
+
+      # - name: Deploy Backend
+      #   run: |
+      #     # Pull the Docker image from Docker Hub
+      #     docker pull ${{ env.BACKEND_IMAGE }}
       
-          # Tag the image for Google Container Registry
-          docker tag ${{ env.BACKEND_IMAGE }} gcr.io/${{ env.PROJECT_ID }}/mlcb-backend:latest
+      #     # Tag the image for Google Container Registry
+      #     docker tag ${{ env.BACKEND_IMAGE }} gcr.io/${{ env.PROJECT_ID }}/mlcb-backend:latest
       
-          # Push the image to Google Container Registry
-          docker push gcr.io/${{ env.PROJECT_ID }}/mlcb-backend:latest
+      #     # Push the image to Google Container Registry
+      #     docker push gcr.io/${{ env.PROJECT_ID }}/mlcb-backend:latest
       
-          # Deploy the image to Google Cloud Run
-          gcloud run deploy multilanguagechatboxbackend \
-              --image=gcr.io/${{ env.PROJECT_ID }}/mlcb-backend:latest \
-              --region=us-central1 \
-              --allow-unauthenticated \
-              --platform=managed \
-              --port=5678 \
-              --verbosity=debug \
-              --set-env-vars=DB_HOST=${{ secrets.DB_HOST }},DB_PASS=${{ secrets.DB_PASS }},DB_PORT=${{ secrets.DB_PORT }},DB_USER=${{ secrets.DB_USER }},DB_NAME=${{ secrets.DB_NAME }},ssh_username=${{ secrets.ssh_username }},ssh_password=${{ secrets.ssh_password }},ssh_hostname=${{ secrets.ssh_hostname }},ssh_port=${{ secrets.ssh_port }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_REFRESH_SECRET_KEY=${{ secrets.JWT_REFRESH_SECRET_KEY }},SSH=${{ secrets.SSH }},GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT }},SCHEMA=${{ secrets.SCHEMA }},SECRET_SALT=${{ secrets.SECRET_SALT }},PROJECT_ID=${{ secrets.PROJECT_ID }},GOOGLE_ACCOUNT=${{ secrets.GOOGLE_ACCOUNT }}
+      #     # Deploy the image to Google Cloud Run
+      #     gcloud run deploy multilanguagechatboxbackend \
+      #         --image=gcr.io/${{ env.PROJECT_ID }}/mlcb-backend:latest \
+      #         --region=us-central1 \
+      #         --allow-unauthenticated \
+      #         --platform=managed \
+      #         --port=5678 \
+      #         --verbosity=debug \
+      #         --set-env-vars=DB_HOST=${{ secrets.DB_HOST }},DB_PASS=${{ secrets.DB_PASS }},DB_PORT=${{ secrets.DB_PORT }},DB_USER=${{ secrets.DB_USER }},DB_NAME=${{ secrets.DB_NAME }},ssh_username=${{ secrets.ssh_username }},ssh_password=${{ secrets.ssh_password }},ssh_hostname=${{ secrets.ssh_hostname }},ssh_port=${{ secrets.ssh_port }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_REFRESH_SECRET_KEY=${{ secrets.JWT_REFRESH_SECRET_KEY }},SSH=${{ secrets.SSH }},GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT }},SCHEMA=${{ secrets.SCHEMA }},SECRET_SALT=${{ secrets.SECRET_SALT }},PROJECT_ID=${{ secrets.PROJECT_ID }},GOOGLE_ACCOUNT=${{ secrets.GOOGLE_ACCOUNT }}
