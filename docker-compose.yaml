@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: backend/Dockerfile
     image: ${DOCKER_USERNAME}/mlcb:backend
+    platform: linux/amd64
     environment:
       - DB_HOST=${DB_HOST}
       - DB_PASS=${DB_PASS}
@@ -37,6 +38,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     image: ${DOCKER_USERNAME}/mlcb:frontend
+    platform: linux/amd64
     environment:
       - DOCKER_USERNAME=${DOCKER_USERNAME}
     ports:
