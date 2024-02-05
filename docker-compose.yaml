@@ -30,7 +30,7 @@ services:
       - SECRET_SALT=${SECRET_SALT}
       - DOCKER_USERNAME=${DOCKER_USERNAME}
     ports:
-      - "8000:8000"
+      - "5678:5678"
     restart: always
 
   mlcb_frontend:
