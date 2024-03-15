@@ -6,29 +6,29 @@ env:
   IMAGE_TAG: $(date +%Y%m%d%H%M%S)
 
 jobs:
-#   code-linting:
-#     runs-on: ubuntu-latest
-#     strategy:
-#       matrix:
-#         python-version: [ "3.11" ]
-#     steps:
-#       - uses: actions/checkout@v3
-#       - name: Set up Python ${{ matrix.python-version }}
-#         uses: actions/setup-python@v3
-#         with:
-#           python-version: ${{ matrix.python-version }}
+  code-linting:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ "3.11" ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
 
-#       - name: Analysing the code with pylint
-#         run: |
-#           python -m pip install --upgrade pip
-#           pip install --no-cache-dir -e 'backend/src'
-#           pip install pylint
-#           pylint $(git ls-files '*.py')
+      - name: Analysing the code with pylint
+        run: |
+          python -m pip install --upgrade pip
+          pip install --no-cache-dir -e 'backend/src'
+          pip install pylint
+          pylint $(git ls-files '*.py')
 
 
   docker-build:
     runs-on: ubuntu-latest
-    # needs: code-linting
+    needs: code-linting
     strategy:
       matrix:
         python-version: ["3.11"]
@@ -83,42 +83,42 @@ jobs:
         docker-compose -f docker-compose.yaml push
 
 
-#   unit-testing:
-#     runs-on: ubuntu-latest
-#     needs: docker-build
-#     services:
-#       postgres:
-#         image: postgres:latest
-#         env:
-#           POSTGRES_DB: test_db
-#           POSTGRES_USER: test_user
-#           POSTGRES_PASSWORD: test_password
-#           POSTGRES_HOST: localhost
-#           POSTGRES_PORT: 5432
-#         ports:
-#           - 5432:5432
-#         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-#     strategy:
-#       matrix:
-#         python-version: [ "3.11" ]
+  unit-testing:
+    runs-on: ubuntu-latest
+    needs: docker-build
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    strategy:
+      matrix:
+        python-version: [ "3.11" ]
 
-#     steps:
-#       - uses: actions/checkout@v3
-#       - name: Set up Python ${{ matrix.python-version }}
-#         uses: actions/setup-python@v3
-#         with:
-#           python-version: ${{ matrix.python-version }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
 
-#       - name: installing dependencies
-#         run: |
-#           python -m pip install --upgrade pip
-#           pip install --no-cache-dir -e 'backend/src'
+      - name: installing dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --no-cache-dir -e 'backend/src'
 
-#       - name: Unit testing
-#         run: pytest
+      - name: Unit testing
+        run: pytest
 
-# #      - name: Tear down Docker Compose
-# #        run: docker-compose -f docker-compose.yaml down
+#      - name: Tear down Docker Compose
+#        run: docker-compose -f docker-compose.yaml down
   deployment:
     needs: docker-build
     runs-on: ubuntu-latest
@@ -173,23 +173,23 @@ jobs:
             --verbosity=debug \
             --platform=managed
 
-      # - name: Deploy Backend
-      #   run: |
-      #     # Pull the Docker image from Docker Hub
-      #     docker pull ${{ env.BACKEND_IMAGE }}
+      - name: Deploy Backend
+        run: |
+          # Pull the Docker image from Docker Hub
+          docker pull ${{ env.BACKEND_IMAGE }}
       
-      #     # Tag the image for Google Container Registry
-      #     docker tag ${{ env.BACKEND_IMAGE }} gcr.io/${{ env.PROJECT_ID }}/mlcb-backend:latest
+          # Tag the image for Google Container Registry
+          docker tag ${{ env.BACKEND_IMAGE }} gcr.io/${{ env.PROJECT_ID }}/mlcb-backend:latest
       
-      #     # Push the image to Google Container Registry
-      #     docker push gcr.io/${{ env.PROJECT_ID }}/mlcb-backend:latest
+          # Push the image to Google Container Registry
+          docker push gcr.io/${{ env.PROJECT_ID }}/mlcb-backend:latest
       
-      #     # Deploy the image to Google Cloud Run
-      #     gcloud run deploy multilanguagechatboxbackend \
-      #         --image=gcr.io/${{ env.PROJECT_ID }}/mlcb-backend:latest \
-      #         --region=us-central1 \
-      #         --allow-unauthenticated \
-      #         --platform=managed \
-      #         --port=5678 \
-      #         --verbosity=debug \
-      #         --set-env-vars=DB_HOST=${{ secrets.DB_HOST }},DB_PASS=${{ secrets.DB_PASS }},DB_PORT=${{ secrets.DB_PORT }},DB_USER=${{ secrets.DB_USER }},DB_NAME=${{ secrets.DB_NAME }},ssh_username=${{ secrets.ssh_username }},ssh_password=${{ secrets.ssh_password }},ssh_hostname=${{ secrets.ssh_hostname }},ssh_port=${{ secrets.ssh_port }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_REFRESH_SECRET_KEY=${{ secrets.JWT_REFRESH_SECRET_KEY }},SSH=${{ secrets.SSH }},GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT }},SCHEMA=${{ secrets.SCHEMA }},SECRET_SALT=${{ secrets.SECRET_SALT }},PROJECT_ID=${{ secrets.PROJECT_ID }},GOOGLE_ACCOUNT=${{ secrets.GOOGLE_ACCOUNT }}
+          # Deploy the image to Google Cloud Run
+          gcloud run deploy multilanguagechatboxbackend \
+              --image=gcr.io/${{ env.PROJECT_ID }}/mlcb-backend:latest \
+              --region=us-central1 \
+              --allow-unauthenticated \
+              --platform=managed \
+              --port=5678 \
+              --verbosity=debug \
+              --set-env-vars=DB_HOST=${{ secrets.DB_HOST }},DB_PASS=${{ secrets.DB_PASS }},DB_PORT=${{ secrets.DB_PORT }},DB_USER=${{ secrets.DB_USER }},DB_NAME=${{ secrets.DB_NAME }},ssh_username=${{ secrets.ssh_username }},ssh_password=${{ secrets.ssh_password }},ssh_hostname=${{ secrets.ssh_hostname }},ssh_port=${{ secrets.ssh_port }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_REFRESH_SECRET_KEY=${{ secrets.JWT_REFRESH_SECRET_KEY }},SSH=${{ secrets.SSH }},GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT }},SCHEMA=${{ secrets.SCHEMA }},SECRET_SALT=${{ secrets.SECRET_SALT }},PROJECT_ID=${{ secrets.PROJECT_ID }},GOOGLE_ACCOUNT=${{ secrets.GOOGLE_ACCOUNT }}
