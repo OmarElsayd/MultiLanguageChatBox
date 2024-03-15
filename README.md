@@ -64,97 +64,95 @@ Multi-Language Chat Box (MLCB)
 │ │ │ │ └── models.py                    - Defines specific database models
 │ │ │ ├── dependency/                    - Dependency injection and utility classes
 │ │ │ │ ├── init.py                      - Initializes the dependency sub-package
-│ │ │ │ ├── exception_handler.py - Custom exception handling for the backend
-│ │ │ │ ├── role_checker.py - Checks user roles for access control
-│ │ │ │ └── user_checker.py - Verifies user information and permissions
-│ │ │ ├── security_auth/ - Authentication and authorization mechanisms
-│ │ │ │ ├── init.py - Initializes the security_auth sub-package
-│ │ │ │ ├── auth_schema.py - Schemas for authentication data
-│ │ │ │ └── jwt_auth.py - JWT authentication handling
-│ │ │ └── util/ - Additional utility functions
-│ │ │ ├── init.py - Initializes the util sub-package
-│ │ │ ├── constant.py - Constants used across the backend
-│ │ │ └── payloads.py - Defines data payloads for API communication
-│ │ ├── main.py - Main entry point for the backend application
-│ │ ├── requirements.txt - Lists all Python package dependencies
-│ │ └── setup.py - Setup script for the backend application
-│ ├── Dockerfile - Docker configuration for building the backend service
-│ ├── alembic.ini - Configuration file for Alembic migrations
-│ └── entrypoint.sh - Script that runs when the Docker container starts
+│ │ │ │ ├── exception_handler.py         - Custom exception handling for the backend
+│ │ │ │ ├── role_checker.py              - Checks user roles for access control
+│ │ │ │ └── user_checker.py               - Verifies user information and permissions
+│ │ │ ├── security_auth/                 - Authentication and authorization mechanisms
+│ │ │ │ ├── init.py                      - Initializes the security_auth sub-package
+│ │ │ │ ├── auth_schema.py               - Schemas for authentication data
+│ │ │ │ └── jwt_auth.py                   - JWT authentication handling
+│ │ │ └── util/                          - Additional utility functions
+│ │ │ ├── init.py                         - Initializes the util sub-package
+│ │ │ ├── constant.py                     - Constants used across the backend
+│ │ │ └── payloads.py                     - Defines data payloads for API communication
+│ │ ├── main.py                           - Main entry point for the backend application
+│ │ ├── requirements.txt                  - Lists all Python package dependencies
+│ │ └── setup.py                           - Setup script for the backend application
+│ ├── Dockerfile                           - Docker configuration for building the backend service
+│ ├── alembic.ini                          - Configuration file for Alembic migrations
+│ └── entrypoint.sh                       - Script that runs when the Docker container starts
 │
-├── frontend/ - Frontend part of the project, containing client-side code
-│ ├── mlcb/ - Angular project for the frontend
-│ │ ├── src/ - Source files for the Angular application
-│ │ │ ├── app/ - Angular components, services, and modules
-│ │ │ │ ├── api_services/ - Services for API interaction
-│ │ │ │ │ ├── api.service.ts - Service for API calls
-│ │ │ │ │ ├── before-unload.service.ts - Handles events before unloading the page
-│ │ │ │ │ ├── note.service.ts - Service for managing notes
-│ │ │ │ │ ├── speech.service.ts - Service for speech operations
-│ │ │ │ │ └── web-socket.service.ts - WebSocket service for real-time communication
-│ │ │ │ ├── authGuard/ - Authentication guards for route protection
-│ │ │ │ │ └── auth-guard.service.ts - Service for guarding routes based on authentication
-│ │ │ │ ├── home/ - Home module with related components
-│ │ │ │ │ ├── dialog/ - Dialog components for chat interactions
-│ │ │ │ │ │ ├── dialog.component.html - Markup for the dialog component
-│ │ │ │ │ │ ├── dialog.component.scss - Styles for the dialog component
-│ │ │ │ │ │ └── dialog.component.ts - Logic for the dialog component
-│ │ │ │ │ ├── new-session/ - Components for creating new chat sessions
-│ │ │ │ │ │ ├── new-session.component.html - Markup for new session creation
-│ │ │ │ │ │ ├── new-session.component.scss - Styles for the new session component
-│ │ │ │ │ │ └── new-session.component.ts - Logic for new session creation
-│ │ │ │ │ ├── session-histroy/ - Components for displaying session history
-│ │ │ │ │ │ ├── session-histroy.component.html - Markup for session history
-│ │ │ │ │ │ ├── session-histroy.component.scss - Styles for session history
-│ │ │ │ │ │ └── session-histroy.component.ts - Logic for session history management
-│ │ │ │ │ ├── home.component.html - Markup for the home component
-│ │ │ │ │ ├── home.component.scss - Styles for the home component
-│ │ │ │ │ └── home.component.ts - Logic for the home component
-│ │ │ │ ├── login/ - Login components and services
-│ │ │ │ │ ├── login.component.html - Markup for the login component
-│ │ │ │ │ ├── login.component.scss - Styles for the login component
-│ │ │ │ │ ├── login.component.spec.ts - Test specifications for the login component
-│ │ │ │ │ └── login.component.ts - Logic for the login component
-│ │ │ │ ├── signup/ - Signup components and services
-│ │ │ │ │ ├── signup.component.html - Markup for the signup component
-│ │ │ │ │ ├── signup.component.scss - Styles for the signup component
-│ │ │ │ │ └── signup.component.ts - Logic for the signup component
-│ │ │ │ ├── app.component.html - Root component markup for the Angular app
-│ │ │ │ ├── app.component.scss - Root component styles for the Angular app
-│ │ │ │ ├── app.component.ts - Root component logic for the Angular app
-│ │ │ │ ├── app.config.server.ts - Server-specific configuration for the Angular app
-│ │ │ │ ├── app.config.ts - Client-specific configuration for the Angular app
-│ │ │ │ ├── app.module.ts - Root module for the Angular app
-│ │ │ │ └── app.routes.ts - Routing definitions for the Angular app
-│ │ │ ├── assets/ - Static assets like images, icons, and styles
-│ │ │ │ └── icons/ - Icon files used throughout the frontend
-│ │ │ │ └── github.svg - GitHub icon used in the frontend
-│ │ │ ├── environments/ - Environment-specific configurations for Angular
-│ │ │ │ ├── environment.prod.ts - Production environment settings
-│ │ │ │ └── environment.ts - Development environment settings
-│ │ │ ├── favicon.ico - Favicon for the web application
-│ │ │ ├── index.html - Entry HTML file for the Angular application
-│ │ │ ├── main.server.ts - Entry point for Angular Universal (server-side rendering)
-│ │ │ ├── main.ts - Main entry point for the Angular client-side application
-│ │ │ └── styles.scss - Global styles for the Angular application
-│ │ ├── angular.json - Angular CLI configuration file
-│ │ ├── package.json - NPM package dependencies for the frontend
-│ │ ├── server.ts - Server-side rendering setup for Angular Universal
-│ │ ├── tsconfig.app.json - TypeScript configuration for the Angular app
-│ │ ├── tsconfig.json - Root TypeScript configuration for the Angular project
-│ │ └── tsconfig.spec.json - TypeScript configuration for Angular tests
-│ └── Dockerfile - Docker configuration for building the frontend service
+├── frontend/                                 - Frontend part of the project, containing client-side code
+│ ├── mlcb/                                   - Angular project for the frontend
+│ │ ├── src/                                  - Source files for the Angular application
+│ │ │ ├── app/                                 - Angular components, services, and modules
+│ │ │ │ ├── api_services/                     - Services for API interaction
+│ │ │ │ │ ├── api.service.ts                   - Service for API calls
+│ │ │ │ │ ├── before-unload.service.ts        - Handles events before unloading the page
+│ │ │ │ │ ├── note.service.ts                 - Service for managing notes
+│ │ │ │ │ ├── speech.service.ts               - Service for speech operations
+│ │ │ │ │ └── web-socket.service.ts           - WebSocket service for real-time communication
+│ │ │ │ ├── authGuard/                        - Authentication guards for route protection
+│ │ │ │ │ └── auth-guard.service.ts           - Service for guarding routes based on authentication
+│ │ │ │ ├── home/                              - Home module with related components
+│ │ │ │ │ ├── dialog/                           - Dialog components for chat interactions
+│ │ │ │ │ │ ├── dialog.component.html           - Markup for the dialog component
+│ │ │ │ │ │ ├── dialog.component.scss             - Styles for the dialog component
+│ │ │ │ │ │ └── dialog.component.ts               - Logic for the dialog component
+│ │ │ │ │ ├── new-session/                         - Components for creating new chat sessions
+│ │ │ │ │ │ ├── new-session.component.html         - Markup for new session creation
+│ │ │ │ │ │ ├── new-session.component.scss         - Styles for the new session component
+│ │ │ │ │ │ └── new-session.component.ts             - Logic for new session creation
+│ │ │ │ │ ├── session-histroy/                     - Components for displaying session history
+│ │ │ │ │ │ ├── session-histroy.component.html       -  Markup for session history
+│ │ │ │ │ │ ├── session-histroy.component.scss       - Styles for session history
+│ │ │ │ │ │ └── session-histroy.component.ts           - Logic for session history management
+│ │ │ │ │ ├── home.component.html                       - Markup for the home component
+│ │ │ │ │ ├── home.component.scss                       - Styles for the home component
+│ │ │ │ │ └── home.component.ts                           - Logic for the home component
+│ │ │ │ ├── login/                                         - Login components and services
+│ │ │ │ │ ├── login.component.html                           - Markup for the login component
+│ │ │ │ │ ├── login.component.scss                           - Styles for the login component
+│ │ │ │ │ ├── login.component.spec.ts                         - Test specifications for the login component
+│ │ │ │ │ └── login.component.ts                               - Logic for the login component
+│ │ │ │ ├── signup/                                             - Signup components and services
+│ │ │ │ │ ├── signup.component.html                             - Markup for the signup component
+│ │ │ │ │ ├── signup.component.scss                             - Styles for the signup component
+│ │ │ │ │ └── signup.component.ts                                - Logic for the signup component
+│ │ │ │ ├── app.component.html                                   - Root component markup for the Angular app
+│ │ │ │ ├── app.component.scss                                   - Root component styles for the Angular app
+│ │ │ │ ├── app.component.ts                                     - Root component logic for the Angular app
+│ │ │ │ ├── app.config.server.ts                                 - Server-specific configuration for the Angular app
+│ │ │ │ ├── app.config.ts                                        - Client-specific configuration for the Angular app
+│ │ │ │ ├── app.module.ts                                         - Root module for the Angular app
+│ │ │ │ └── app.routes.ts                                         - Routing definitions for the Angular app
+│ │ │ ├── assets/                                                 - Static assets like images, icons, and styles
+│ │ │ │ └── icons/                                                 - Icon files used throughout the frontend
+│ │ │ │ └── github.svg                                             - GitHub icon used in the frontend
+│ │ │ ├── environments/                                            - Environment-specific configurations for Angular
+│ │ │ │ ├── environment.prod.ts                                    - Production environment settings
+│ │ │ │ └── environment.ts                                         - Development environment settings
+│ │ │ ├── favicon.ico                                              - Favicon for the web application
+│ │ │ ├── index.html                                               - Entry HTML file for the Angular application
+│ │ │ ├── main.server.ts                                           - Entry point for Angular Universal (server-side rendering)
+│ │ │ ├── main.ts                                                  - Main entry point for the Angular client-side application
+│ │ │ └── styles.scss                                              - Global styles for the Angular application
+│ │ ├── angular.json                                               - Angular CLI configuration file
+│ │ ├── package.json                                               - NPM package dependencies for the frontend
+│ │ ├── server.ts                                                  - Server-side rendering setup for Angular Universal
+│ │ ├── tsconfig.app.json                                          - TypeScript configuration for the Angular app
+│ │ ├── tsconfig.json                                              - Root TypeScript configuration for the Angular project
+│ │ └── tsconfig.spec.json                                         - TypeScript configuration for Angular tests
+│ └── Dockerfile                                                   - Docker configuration for building the frontend service
 │
-├── nginx/ - Nginx web server configuration for serving the frontend
-│ └── nginx.conf - Main configuration file for Nginx
+├── nginx/                                                         - Nginx web server configuration for serving the frontend
+│ └── nginx.conf                                                   - Main configuration file for Nginx
 │
-├── local/ - Contains scripts for local development and setup
-│ └── install_dependencies/ - Scripts to install dependencies for the project
-│ └── mlcb_backend_package.sh - Shell script to install backend dependencies
+├── local/                                                          - Contains scripts for local development and setup
+│ └── install_dependencies/                                         - Scripts to install dependencies for the project
+│ └── mlcb_backend_package.sh                                       - Shell script to install backend dependencies
 │
-├── .dockerignore - Specifies patterns to ignore in Docker build context
-├── .pylintrc - Configuration file for Python linting with Pylint
-├── docker-compose.yaml - Defines and configures multi-container Docker applications
-├── LICENSE - License file specifying the usage rights
-└── README.md - Documentation of the project, describing its purpose and setup
+├── .dockerignore                                                   - Specifies patterns to ignore in Docker build context
+├── .pylintrc                                                       - Configuration file for Python linting with Pylint
+├── docker-compose.yaml                                             - Defines and configures multi-container Docker applications
 ```
