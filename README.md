@@ -8,15 +8,6 @@ Multi-Language Chat Box (MLCB)
 │   └── workflows/
 │       └── github-ci.yml            - CI/CD workflow for GitHub Actions
 │
-├── .idea/                           - JetBrains IDE configuration files
-│   ├── .gitignore
-│   ├── inspectionProfiles/
-│   │   └── profiles_settings.xml
-│   ├── misc.xml
-│   ├── modules.xml
-│   ├── MultiLanguageChatBox-master.iml
-│   └── workspace.xml
-│
 ├── backend/
 │   ├── alembic/
 │   │   ├── env.py                   - Alembic environment script
